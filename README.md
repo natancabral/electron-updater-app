@@ -1,1 +1,1 @@
-# electron-updater-app
+# Electron Updater App
