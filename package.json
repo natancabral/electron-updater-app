@@ -1,25 +1,111 @@
 {
   "name": "electron-updater-app",
   "version": "1.0.1",
-  "description": "",
+  "description": "Electron Updater App DSC",
+  "author": {
+    "name": "Natan Cabrak",
+    "email": "natancabral@hotmail.com"
+  },
   "main": "main.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/natancabral/electron-updater-app.git"
+    "type": "git",
+    "url": "https://github.com/natancabral/electron-updater-app.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "build": "electron-builder build --mac --win --publish never",
-    "deploy": "electron-builder build --mac --win --publish always"
+    "start": "electron . APP_DEV=true",
+    "start:prod": "electron . APP_DEV=false",
+    "build": "electron-builder build --win --publish never",
+    "deploy": "electron-builder build --win --publish always"
   },
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "electron": "^14.0.0",
     "electron-builder": "^22.11.7"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "electron-is-dev": "^2.0.0",
     "electron-updater": "^4.3.9"
+  },
+  "build": {
+    "asar": true,
+    "extends": null,
+    "publish": null,
+    "appId": "com.natancabral.package",
+    "compression": "maximum",
+    "productName": "Electron Updater App PN",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./assets/ico/icon.ico"
+    },
+    "msi": {
+      "shortcutName": "Electron Updater App",
+      "artifactName":"${name}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "shortcutName": "Electron Updater App",
+      "artifactName":"${name}-Setup-${version}.${ext}",
+      "installerIcon": "./assets/ico/icon.ico",
+      "oneClick": true,
+      "perMachine": true,
+      "allowElevation": true,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": true,
+      "allowToChangeInstallationDirectory": false
+    },
+    "publish": [{
+        "provider": "github",
+        "url": "https://github.com/natancabral/electron-updater-app"
+    }],
+    "mac": {
+      "artifactName":"${name}-Setup-${version}.${ext}",
+      "target": [
+        "dmg"
+      ],
+      "icon": "./assets/ico/mac512.icns",
+      "category": "public.app-category.graphics-design"
+    },
+    "dmg": {
+      "artifactName":"${name}-Setup-${version}.${ext}",
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "icon": "./assets/ico/mac512.icns"
+    },
+    "linux": {
+      "artifactName":"${name}-Setup-${version}.${ext}",
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "category": "Development"
+    },
+    "deb": {
+      "artifactName":"${name}-Setup-${version}.${ext}"
+    },
+    "directories": {
+      "buildResources": "./",
+      "output": "dist"
+    },
+    "files": [
+      "package.json",
+      "assets/**/*",
+      "main.js",
+      "renderer.js"
+    ]
   }
 }
