@@ -1,9 +1,9 @@
 {
   "name": "electron-updater-app",
   "version": "1.0.0",
-  "description": "Electron Updater App DSC",
+  "description": "Electron Updater App - Description",
   "author": {
-    "name": "Natan Cabrak",
+    "name": "Natan Cabral",
     "email": "natancabral@hotmail.com"
   },
   "main": "main.js",
@@ -15,8 +15,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron . APP_DEV=true",
     "start:prod": "electron . APP_DEV=false",
-    "build": "electron-builder build --win --publish never",
-    "deploy": "electron-builder build --win --publish always"
+    "deploy": "electron-builder build --publish always",
+    "build": "electron-builder build --publish never",
+    "build:win": "electron-builder build --win --publish never",
+    "build:linux": "electron-builder build --linux --publish never",
+    "build:all": "electron-builder build --win --linux --mac --publish never"
   },
   "license": "MIT",
   "devDependencies": {
@@ -31,10 +34,13 @@
   "build": {
     "asar": true,
     "extends": null,
-    "publish": null,
     "appId": "com.natancabral.package",
     "compression": "maximum",
     "productName": "Electron Updater App PN",
+    "publish": [{
+      "provider": "github",
+      "url": "https://github.com/natancabral/electron-updater-app"
+    }],
     "win": {
       "target": [
         "nsis"
@@ -58,10 +64,6 @@
       "deleteAppDataOnUninstall": true,
       "allowToChangeInstallationDirectory": false
     },
-    "publish": [{
-        "provider": "github",
-        "url": "https://github.com/natancabral/electron-updater-app"
-    }],
     "mac": {
       "artifactName":"${name}-Setup-${version}.${ext}",
       "target": [
@@ -105,7 +107,7 @@
       "package.json",
       "assets/**/*",
       "main.js",
-      "renderer.js"
+      "preload.js"
     ]
   }
 }

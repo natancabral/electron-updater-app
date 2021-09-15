@@ -1,6 +1,7 @@
 const { dialog, app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
+const path = require('path');
 
 // process.env.GH_TOKEN = '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';
 
@@ -19,26 +20,24 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
       nativeWindowOpen: true,
       nodeIntegration: true,
     },
   });
-  mainWindow.loadFile('./index.html');
+  mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-
   mainWindow.once('ready-to-show', () => {
-    war('Version: ' + app.getVersion());
-
-	if (isDev) {
-		war('Running in development');
-	} else {
-    autoUpdater.checkForUpdates();
-    autoUpdater.checkForUpdatesAndNotify();
-		war('Running in production');
-	}
-
+    // war('Version: ' + app.getVersion());
+    if (isDev) {
+      war('Running in development');
+    } else {
+      autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();
+      // war('Running in production');
+    }
   });
 }
 
@@ -56,25 +55,23 @@ app.on('window-all-closed', function () {
 });
 
 autoUpdater.on('update-available', () => {
-  war('--update_available');
-  //mainWindow.webContents.send('update_available');
+  war('Update available');
+  mainWindow.webContents.send('update_available');
 });
 
 ipcMain.on('restart_app', () => {
-  war('--restart_app');
+  // war('--restart_app');
   autoUpdater.quitAndInstall();
+  app.quit();
 });
 
 autoUpdater.on('error' , (error) => {
-
   let m = error.message;
   m = m.replace('release/','r/');
   m = m.replace('download/','d/');
-
   if(m === 'No published versions on GitHub') {
     dialog.showErrorBox('Error', 'Sem versões publicadas');
-  }
-  else if(isDev){
+  } else if(isDev){
   	dialog.showErrorBox('Error', m);
   } else {
   	dialog.showErrorBox('Error', m);
@@ -83,26 +80,30 @@ autoUpdater.on('error' , (error) => {
 })
 
 autoUpdater.on('update-downloaded', (info) => {
-
+  mainWindow.webContents.send('update_downloaded');
   const message = {
     type: 'info',
     buttons: ['Restart', 'Update'],
     title: `Update`,
     detail: `A new version has been downloaded. Restart to apply the updates.`
   }
-
   dialog.showMessageBox(message, (res) => {
     if(res === 0) {
       autoUpdater.quitAndInstall();
+      app.quit();
     }
   })
 })
 
 autoUpdater.on('download-progress', function (progressObj) {
-    let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    war(log_message);
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  war(log_message);
+});
+
+ipcMain.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
 });
 
 
