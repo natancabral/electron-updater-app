@@ -21,11 +21,10 @@ function createWindow () {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nativeWindowOpen: true,
       nodeIntegration: true,
     },
   });
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile('index.html');
   mainWindow.on('closed', function () {
     mainWindow = null;
   });

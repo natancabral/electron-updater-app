@@ -48,11 +48,11 @@
       "icon": "./assets/ico/icon.ico"
     },
     "msi": {
-      "shortcutName": "Electron Updater App MSI",
+      "shortcutName": "${productName}",
       "artifactName":"${name}-Setup-${version}.${ext}"
     },
     "nsis": {
-      "shortcutName": "Electron Updater App NSIS",
+      "shortcutName": "${productName}",
       "artifactName":"${name}-Setup-${version}.${ext}",
       "installerIcon": "./assets/ico/icon.ico",
       "oneClick": true,
@@ -72,7 +72,6 @@
       "category": "public.app-category.graphics-design"
     },
     "dmg": {
-      "shortcutName": "Electron Updater App DMG",
       "artifactName":"${name}-Setup-${version}.${ext}",
       "contents": [
         {
@@ -96,7 +95,6 @@
       "category": "Development"
     },
     "deb": {
-      "shortcutName": "Electron Updater App DEB",
       "artifactName":"${name}-Setup-${version}.${ext}"
     },
     "directories": {
@@ -106,8 +104,10 @@
     "files": [
       "package.json",
       "assets/**/*",
-      "main.js",
-      "preload.js"
+      ".env",
+      "*.html",
+      "*.js",
+      "*.css"
     ]
   }
 }
