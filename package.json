@@ -34,7 +34,7 @@
   "build": {
     "asar": true,
     "extends": null,
-    "appId": "com.natancabral.package",
+    "appId": "com.natancabral.${name}",
     "compression": "maximum",
     "productName": "Electron Updater App PN",
     "publish": [{
@@ -48,11 +48,11 @@
       "icon": "./assets/ico/icon.ico"
     },
     "msi": {
-      "shortcutName": "Electron Updater App",
+      "shortcutName": "Electron Updater App MSI",
       "artifactName":"${name}-Setup-${version}.${ext}"
     },
     "nsis": {
-      "shortcutName": "Electron Updater App",
+      "shortcutName": "Electron Updater App NSIS",
       "artifactName":"${name}-Setup-${version}.${ext}",
       "installerIcon": "./assets/ico/icon.ico",
       "oneClick": true,
@@ -65,7 +65,6 @@
       "allowToChangeInstallationDirectory": false
     },
     "mac": {
-      "artifactName":"${name}-Setup-${version}.${ext}",
       "target": [
         "dmg"
       ],
@@ -73,6 +72,7 @@
       "category": "public.app-category.graphics-design"
     },
     "dmg": {
+      "shortcutName": "Electron Updater App DMG",
       "artifactName":"${name}-Setup-${version}.${ext}",
       "contents": [
         {
@@ -89,7 +89,6 @@
       "icon": "./assets/ico/mac512.icns"
     },
     "linux": {
-      "artifactName":"${name}-Setup-${version}.${ext}",
       "target": [
         "deb",
         "AppImage"
@@ -97,6 +96,7 @@
       "category": "Development"
     },
     "deb": {
+      "shortcutName": "Electron Updater App DEB",
       "artifactName":"${name}-Setup-${version}.${ext}"
     },
     "directories": {
