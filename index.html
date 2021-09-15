@@ -1,29 +1,11 @@
 <!DOCTYPE html>
 <head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <link rel="stylesheet" type="text/css" href="./index.css">
   <title>Electron Updater App</title>
-  <style>
-    body {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 20px;
-      font-family: sans-serif;
-      background-color: #ffffff;
-      text-align: center;
-    }
-    #notification {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 200px;
-      padding: 20px;
-      border-radius: 5px;
-      background-color: white;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <h1>Electron Updater App</h1>
@@ -37,5 +19,5 @@
       Restart
     </button>
   </div>
-  <!-- script src="./renderer.js"></script -->
+  <script src="./renderer.js"></script>
 </body>

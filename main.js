@@ -2,7 +2,7 @@ const { dialog, app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 
-process.env.GH_TOKEN = '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';
+// process.env.GH_TOKEN = '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';
 
 function war(str){
 	dialog.showMessageBox({
@@ -34,30 +34,19 @@ function createWindow () {
 	if (isDev) {
 		war('Running in development');
 	} else {
+    autoUpdater.checkForUpdates();
+    autoUpdater.checkForUpdatesAndNotify();
 		war('Running in production');
 	}
-
-	autoUpdater.checkForUpdates();
-	autoUpdater.checkForUpdatesAndNotify();
 
   });
 }
 
-app.on('ready', () => {
+app.whenReady().then(() => {
   createWindow();
-
-return;
-  dialog.showMessageBox({
-	type: 'info',
-	title: 'Update Ready',
-	message: 'A new version of app is ready. Quit and Install now?',
-	buttons: ['Yes', 'Later','Cancel']
-}, (index) => {
-	if (!index) {
-		//autoUpdater.quitAndInstall();
-	}
-});
-
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  });
 });
 
 app.on('window-all-closed', function () {
@@ -65,13 +54,6 @@ app.on('window-all-closed', function () {
     app.quit();
   }
 });
-
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
-
 
 autoUpdater.on('update-available', () => {
   war('--update_available');
@@ -85,15 +67,17 @@ ipcMain.on('restart_app', () => {
 
 autoUpdater.on('error' , (error) => {
 
-  if(error.message === 'No published versions on GitHub') {
-    dialog.showErrorBox('Error', 'Sem versıes publicadas');
+  let m = error.message;
+  m = m.replace('release/','r/');
+  m = m.replace('download/','d/');
+
+  if(m === 'No published versions on GitHub') {
+    dialog.showErrorBox('Error', 'Sem vers√µes publicadas');
   }
-  else {
-	  var a = error.message;
-	  a = a.replace('natancabral/','nc/').replace('download/','d/');
-	  a = a.replaceAll('natancabral/','nc/');
-	  a = a.replaceAll('download/','d/');
-	dialog.showErrorBox('Error', a);	
+  else if(isDev){
+  	dialog.showErrorBox('Error', m);
+  } else {
+  	dialog.showErrorBox('Error', m);
   }
 
 })
