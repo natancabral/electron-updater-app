@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "dotenv": "^10.0.0",
+    "electron-dl": "^3.2.1",
     "electron-is-dev": "^2.0.0",
     "electron-updater": "^4.3.9"
   },
@@ -37,10 +38,12 @@
     "appId": "com.natancabral.${name}",
     "compression": "maximum",
     "productName": "Electron Updater App PN",
-    "publish": [{
-      "provider": "github",
-      "url": "https://github.com/natancabral/electron-updater-app"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "url": "https://github.com/natancabral/electron-updater-app"
+      }
+    ],
     "win": {
       "target": [
         "nsis"
@@ -49,11 +52,11 @@
     },
     "msi": {
       "shortcutName": "${productName}",
-      "artifactName":"${name}-Setup-${version}.${ext}"
+      "artifactName": "${name}-Setup-${version}.${ext}"
     },
     "nsis": {
       "shortcutName": "${productName}",
-      "artifactName":"${name}-Setup-${version}.${ext}",
+      "artifactName": "${name}-Setup-${version}.${ext}",
       "installerIcon": "./assets/ico/icon.ico",
       "oneClick": true,
       "perMachine": true,
@@ -72,7 +75,7 @@
       "category": "public.app-category.graphics-design"
     },
     "dmg": {
-      "artifactName":"${name}-Setup-${version}.${ext}",
+      "artifactName": "${name}-Setup-${version}.${ext}",
       "contents": [
         {
           "x": 110,
@@ -95,7 +98,7 @@
       "category": "Development"
     },
     "deb": {
-      "artifactName":"${name}-Setup-${version}.${ext}"
+      "artifactName": "${name}-Setup-${version}.${ext}"
     },
     "directories": {
       "buildResources": "./",

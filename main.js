@@ -43,7 +43,9 @@ function createWindow () {
 app.whenReady().then(() => {
   createWindow();
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
   });
 });
 
@@ -75,8 +77,7 @@ autoUpdater.on('error' , (error) => {
   } else {
   	dialog.showErrorBox('Error', m);
   }
-
-})
+});
 
 autoUpdater.on('update-downloaded', (info) => {
   mainWindow.webContents.send('update_downloaded');
@@ -105,7 +106,6 @@ ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
 
-
 // realease
 // https://github.com/johndyer24/electron-auto-update-example/releases
 // https://medium.com/@johndyer24/creating-and-deploying-an-auto-updating-electron-app-for-mac-and-windows-using-electron-builder-6a3982c0cee6
@@ -117,3 +117,19 @@ ipcMain.on('app_version', (event) => {
 // https://ourcodeworld.com/articles/read/228/how-to-download-a-webfile-with-electron-save-it-and-show-download-progress
 // https://github.com/sindresorhus/electron-dl
 // https://developpaper.com/electron-download-exe-file-update/
+
+
+// Download Start ---------------------------------------------------------------------------
+const {download} = require("electron-dl");
+
+ipcMain.on("download", (event, info) => {
+  download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+    .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
+});
+
+ipcMain.on("download", (event, info) => {
+  info.properties.onProgress = status => mainWindow.webContents.send("download progress", status);
+  download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+      .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
+});
+// Download End -----------------------------------------------------------------------------

@@ -2,4 +2,6 @@ node_modules
 dist
 
 package-lock.json
+
 electron-builder.yml
+app-update.yml
