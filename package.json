@@ -1,11 +1,12 @@
 {
   "name": "electron-updater-app",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Electron Updater App - Description",
   "author": {
     "name": "Natan Cabral",
     "email": "natancabral@hotmail.com"
   },
+  "website": "http://www.gnnc.com.br",
   "main": "main.js",
   "repository": {
     "type": "git",
@@ -37,7 +38,7 @@
     "extends": null,
     "appId": "com.natancabral.${name}",
     "compression": "maximum",
-    "productName": "Electron Updater App PN",
+    "productName": "Electron Updater App",
     "publish": [
       {
         "provider": "github",
@@ -102,6 +103,7 @@
     },
     "files": [
       "package.json",
+      "app-update.yml",
       "assets/**/*",
       ".env",
       "*.html",

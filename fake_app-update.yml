@@ -1,5 +1,0 @@
-## rename this file to "app-update.yml" and REMOVE THIS LINE 
-appId: com.natancabral.ElectronUpdaterApp
-publish:
-  provider: github
-  token: Get_your_token_here:https://github.com/settings/tokens
