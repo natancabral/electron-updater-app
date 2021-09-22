@@ -63,7 +63,9 @@ autoUpdater.on('update-available', () => {
 ipcMain.on('restart_app', () => {
   // war('--restart_app');
   autoUpdater.quitAndInstall();
-  app.quit();
+  app.relaunch();
+  app.quit(0);
+  mainWindow.quit();
 });
 
 autoUpdater.on('error' , (error) => {
@@ -88,9 +90,17 @@ autoUpdater.on('update-downloaded', (info) => {
     detail: `A new version has been downloaded. Restart to apply the updates.`
   }
   dialog.showMessageBox(message, (res) => {
+
+    autoUpdater.quitAndInstall();
+    app.relaunch();
+    app.quit(0);
+    mainWindow.quit();
+
     if(res === 0) {
       autoUpdater.quitAndInstall();
-      app.quit();
+      app.relaunch();
+      app.quit(0);
+      mainWindow.quit();
     }
   })
 })
