@@ -50,10 +50,6 @@
       ],
       "icon": "./assets/ico/icon.ico"
     },
-    "msi": {
-      "shortcutName": "${productName}",
-      "artifactName": "${name}-Setup-${version}.${ext}"
-    },
     "nsis": {
       "shortcutName": "${productName}",
       "artifactName": "${name}-Setup-${version}.${ext}",
