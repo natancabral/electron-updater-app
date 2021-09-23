@@ -1,0 +1,4 @@
+appId: com.natancabral.ElectronUpdaterApp
+publish:
+  provider: github
+  token: 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

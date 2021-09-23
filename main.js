@@ -13,6 +13,10 @@ function war(str){
 	});
 }
 
+if (isDev) {
+  autoUpdater.updateConfigPath = path.join(__dirname, 'app-update.yml');
+}
+
 let mainWindow;
 
 function createWindow () {
@@ -40,10 +44,18 @@ function createWindow () {
   });
 }
 
+app.on('ready', () => {
+  // createWindow();
+  console.log('--1--');
+});
+
 app.whenReady().then(() => {
   createWindow();
+  console.log('--2--');
   app.on('activate', function () {
+    console.log('--3--');
     if (BrowserWindow.getAllWindows().length === 0) {
+      console.log('--4--');
       createWindow();
     }
   });
@@ -75,9 +87,9 @@ autoUpdater.on('error' , (error) => {
   if(m === 'No published versions on GitHub') {
     dialog.showErrorBox('Error', 'Sem versões publicadas');
   } else if(isDev){
-  	dialog.showErrorBox('Error', m);
+  	dialog.showErrorBox('Error(1)', m);
   } else {
-  	dialog.showErrorBox('Error', m);
+  	// dialog.showErrorBox('Error(2)', m);
   }
 });
 
@@ -115,6 +127,30 @@ autoUpdater.on('download-progress', function (progressObj) {
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
+
+
+// will-finish-launching: Triggered when the application completes the basic startup
+// web-contents-created:webContents is created
+// browser-window-created:BrowserWindow is created
+// ready: Triggered when Electron completes initialization
+// remote-require: Called when remote is introduced
+// before-quit: Triggered before the application starts to close the window
+// will-quit: Emitted when all windows have been closed and the application will exit
+// quit: Issued when the application exits
+// window-all-closed: Triggered when all windows are closed
+// browser-window-focus: Emitted when browserWindow gains focus
+// browser-window-blur: Emitted when the browserWindow loses focus
+// ready-to-show: Triggered when the page has been rendered (but not yet displayed) and the window can be displayed
+// move: Window move
+// resize: Triggered after the window is resized
+// close: Triggered when the window is about to be closed. It fires before the beforeunload and unload events of the DOM.
+// blur: Lost focus, same app
+// focus: Get focus, same app
+// maximize: Triggered when the window is maximized
+// unmaximize: Triggered when the window is maximized and exited
+// minimize: Triggered when the window is minimized
+// restore: Triggered when the window is minimized and restored
+
 
 // realease
 // https://github.com/johndyer24/electron-auto-update-example/releases

@@ -1,6 +1,6 @@
 {
   "name": "electron-updater-app",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Electron Updater App - Description",
   "author": {
     "name": "Natan Cabral",
@@ -39,16 +39,23 @@
     "appId": "com.natancabral.${name}",
     "compression": "maximum",
     "productName": "Electron Updater App",
+    "copyright": "Copyright © 2021 ${author}",
+    "afterSign": "config/afterSignHook.js",
     "publish": [
       {
         "provider": "github",
+        "owner": "natancabral",
+        "repo": "electron-updater-app",
         "url": "https://github.com/natancabral/electron-updater-app"
       }
     ],
     "win": {
       "target": [
-        "nsis"
+        "msi",
+        "nsis",
+        "portable"
       ],
+      "verifyUpdateCodeSignature": false,
       "icon": "./assets/ico/icon.ico"
     },
     "nsis": {
@@ -69,7 +76,9 @@
         "dmg"
       ],
       "icon": "./assets/ico/mac512.icns",
-      "category": "public.app-category.graphics-design"
+      "category": "public.app-category.graphics-design",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
     },
     "dmg": {
       "artifactName": "${name}-Setup-${version}.${ext}",
@@ -98,12 +107,11 @@
       "artifactName": "${name}-Setup-${version}.${ext}"
     },
     "directories": {
-      "buildResources": "./",
-      "output": "dist"
+      "buildResources": "./assets",
+      "output": "./dist",
+      "app": "./"
     },
     "files": [
-      "package.json",
-      "app-update.yml",
       "assets/**/*",
       ".env",
       "*.html",
