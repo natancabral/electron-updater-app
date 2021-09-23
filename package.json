@@ -1,6 +1,6 @@
 {
   "name": "electron-updater-app",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Electron Updater App - Description",
   "author": {
     "name": "Natan Cabral",
@@ -40,7 +40,6 @@
     "compression": "maximum",
     "productName": "Electron Updater App",
     "copyright": "Copyright © 2021 ${author}",
-    "afterSign": "config/afterSignHook.js",
     "publish": [
       {
         "provider": "github",
@@ -107,9 +106,8 @@
       "artifactName": "${name}-Setup-${version}.${ext}"
     },
     "directories": {
-      "buildResources": "./assets",
-      "output": "./dist",
-      "app": "./"
+      "buildResources": "assets",
+      "output": "dist"
     },
     "files": [
       "assets/**/*",
