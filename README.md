@@ -71,7 +71,8 @@ publish:
 
 #### Warning
 - Deb file not works fine, try with AppImage file.
-- Mac sample: [article](https://medium.com/@johndyer24/creating-and-deploying-an-auto-updating-electron-app-for-mac-and-windows-using-electron-builder-6a3982c0cee6)
+- Mac sample 1: [article](https://medium.com/@johndyer24/creating-and-deploying-an-auto-updating-electron-app-for-mac-and-windows-using-electron-builder-6a3982c0cee6)
+Mac sample 2: [article](https://medium.com/jspoint/packaging-and-distributing-electron-applications-using-electron-builder-311fc55178d9)
 
 ## License
 
