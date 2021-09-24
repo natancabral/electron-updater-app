@@ -64,6 +64,7 @@ publish:
 ```
 #### Release
 
+- run: ```ǹpm run build```
 - Upload all file (./dist)
 - https://github.com/[YOUR USERNAME]/[YOUR REPO NAME]/**releases**
 - Remenber: tag: **v1.0.x** and title: **1.0.x**
