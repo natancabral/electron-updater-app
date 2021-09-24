@@ -1,21 +1,19 @@
-const { dialog, app, BrowserWindow, ipcMain } = require('electron');
+const { dialog, app, BrowserWindow, ipcMain, webContents } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
-// Terminal:
-// $ export GH_TOKEN="ghp_nxxx..."
-process.env.GH_TOKEN = 'ghp_9FhfBkEPQJLHw9QQPqtFWb1qvAoFV0gFSNSn';
-
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = "info";
 
-// if (isDev) {
-//   autoUpdater.updateConfigPath = path.join(__dirname, 'app-update.yml');
-// }
+function exitAll() {
+  mainWindow == null;
+  app.quit();
+  app.exit();
+}
 
-function war(str){
+function war(str) {
 	dialog.showMessageBox({
 		type: 'info',
 		title: 'Warning',
@@ -23,9 +21,11 @@ function war(str){
 	});
 }
 
+// Start App
+
 let mainWindow;
 
-function createWindow () {
+function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -51,44 +51,43 @@ function createWindow () {
   });
 }
 
-app.on('ready', () => {
-  createWindow();
-  console.log('--1--');
-});
-
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
-
-// app.whenReady().then(() => {
+// app.on('ready', () => {
 //   createWindow();
-//   console.log('--2--');
-//   app.on('activate', function () {
-//     console.log('--3--');
-//     if (BrowserWindow.getAllWindows().length === 0) {
-//       console.log('--4--');
-//       createWindow();
-//     }
-//   });
-// }).catch( err => {
-//   console.log( err );
+//   console.log('--1--');
 // });
+
+// app.on('activate', function () {
+//   if (mainWindow === null) {
+//     createWindow();
+//   }
+// });
+
+app.whenReady().then(() => {
+  createWindow();
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+}).catch( err => {
+  console.log( err );
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    mainWindow == null;
-    app.quit();
-    app.exit();
-}
+    exitAll();
+  }
 });
 
+// End App
+
+// autoUpdater
 autoUpdater.on('update-available', () => {
-  war('Update available');
-  mainWindow.webContents.send('update_available');
+  // war('Update available');
+  mainWindow.webContents.send('eu-update-available');
 });
 
+// autoUpdater
 autoUpdater.on('error' , (error) => {
   let m = error.message;
   m = m.replace('release/','r/');
@@ -96,52 +95,53 @@ autoUpdater.on('error' , (error) => {
   if(m === 'No published versions on GitHub') {
     dialog.showErrorBox('Error', 'Sem versões publicadas');
   } else if(isDev){
-  	dialog.showErrorBox('Error(1)', m);
+  	dialog.showErrorBox('Error(Dev)', m);
   } else {
-  	dialog.showErrorBox('Error(2)', m);
+  	dialog.showErrorBox('Error', m);
   }
 });
 
+// autoUpdater
 autoUpdater.on('update-downloaded', (info) => {
-  mainWindow.webContents.send('update_downloaded');
+  mainWindow.webContents.send('eu-update-downloaded');
   const message = {
     type: 'info',
-    buttons: ['Restart', 'Update'],
+    buttons: ['Restart', 'Update', 'Cancel'],
     title: `Update`,
     detail: `A new version has been downloaded. Restart to apply the updates.`
   }
   dialog.showMessageBox(message, (res) => {
-
     if(res === 0) {
       autoUpdater.quitAndInstall();
       // app.relaunch();
-      mainWindow == null;
-      app.quit();
-      app.exit();
+      exitAll();
     }
   })
 })
 
+// autoUpdater
 autoUpdater.on('download-progress', function (progressObj) {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  war(log_message);
+  let messege = "Download speed: " + progressObj.bytesPerSecond;
+  messege = messege + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
+  messege = messege + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  mainWindow.webContents.send('eu-download-progress', messege);
 });
 
-ipcMain.on('app_version', (event) => {
-  event.sender.send('app_version', { version: app.getVersion() });
+// End AutoUpdater
+
+// Start ipcMain
+
+ipcMain.on('eu-app-version', (event) => {
+  event.sender.send('eu-app-version', { version: app.getVersion() });
 });
 
-ipcMain.on('restart_app', () => {
-  // war('--restart_app');
+ipcMain.on('eu-restart-app', () => {
   autoUpdater.quitAndInstall();
   // app.relaunch();
-  mainWindow == null;
-  app.quit();
-  app.exit();
+  exitAll();
 });
 
+// End ipcMain
 
 // will-finish-launching: Triggered when the application completes the basic startup
 // web-contents-created:webContents is created
@@ -179,17 +179,13 @@ ipcMain.on('restart_app', () => {
 // https://developpaper.com/electron-download-exe-file-update/
 
 
-// Download Start ---------------------------------------------------------------------------
-// const {download} = require("electron-dl");
+// Start Download Alternative
+const {download} = require("electron-dl");
 
-// ipcMain.on("download", (event, info) => {
-//   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
-//     .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
-// });
+ipcMain.on("download-alternative", (event, info) => {
+  info.properties.onProgress = status => mainWindow.webContents.send("eu-download-alternative-progress", status);
+  download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+      .then(dl => mainWindow.webContents.send("eu-download-alternative-complete", dl.getSavePath()));
+});
 
-// ipcMain.on("download", (event, info) => {
-//   info.properties.onProgress = status => mainWindow.webContents.send("download progress", status);
-//   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
-//       .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
-// });
-// Download End -----------------------------------------------------------------------------
+// End Download Alternative

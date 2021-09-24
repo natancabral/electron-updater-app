@@ -62,3 +62,11 @@ Code
 Example
 https://github.com/matiastucci/electron-auto-updater-example
 https://github.com/junkbin/electron-updater-example
+
+.env
+GH_TOKEN=ghp_9FhfBkEPQJLHw9QQPqtFWb1qvAoFV0gFSNSn
+
+main.js
+process.env.GH_TOKEN='ghp_9FhfBkEPQJLHw9QQPqtFWb1qvAoFV0gFSNSn';
+// Terminal:
+// $ export GH_TOKEN="ghp_nxxx..."

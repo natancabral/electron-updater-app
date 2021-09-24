@@ -13,61 +13,62 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const { ipcRenderer } = require('electron');
 
-  const version = document.getElementById('version');
-  const notification = document.getElementById('notification');
-  const message = document.getElementById('message');
+  const notification  = document.getElementById('eu-notification');
+  const message       = document.getElementById('eu-message');
+  const version       = document.getElementById('version');
   const restartButton = document.getElementById('restart-button');
-  const closeButton = document.getElementById('close-button');
+  const closeButton   = document.getElementById('close-button');
 
-  ipcRenderer.send('app_version');
-  ipcRenderer.on('app_version', (event, arg) => {
+  ipcRenderer.send('eu-app-version');
+  ipcRenderer.on('eu-app-version', (event, arg) => {
     version.innerText = 'Version ' + arg.version;
-    ipcRenderer.removeAllListeners('app_version');
+    ipcRenderer.removeAllListeners('app-version');
   });
 
-  ipcRenderer.on('update_available', () => {
+  ipcRenderer.on('eu-update-available', () => {
     message.innerText = 'A new update is available. Downloading now...';
     notification.classList.remove('hidden');
-    ipcRenderer.removeAllListeners('update_available');
+    ipcRenderer.removeAllListeners('eu-update-available');
   });
 
-  ipcRenderer.on('update_downloaded', () => {
+  ipcRenderer.on('eu-update-downloaded', () => {
     message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
     restartButton.classList.remove('hidden');
     notification.classList.remove('hidden');
-    ipcRenderer.removeAllListeners('update_downloaded');
+    ipcRenderer.removeAllListeners('eu-update-downloaded');
   });
 
-  function closeNotification() {
+  function euCloseNotification() {
     notification.classList.add('hidden');
   }
 
-  function restartApp() {
-    ipcRenderer.send('restart_app');
+  function euRestartApp() {
+    ipcRenderer.send('eu-restart-app');
   }
 
-  closeButton.addEventListener('click',closeNotification);
-  restartButton.addEventListener('click',restartApp);
+  closeButton.addEventListener('click', euCloseNotification);
+  restartButton.addEventListener('click', euRestartApp);
 
   // Download Start ---------------------------------------------------------------------------
 
   // Send
-  ipcRenderer.send("download", {
+  ipcRenderer.send("eu-download-alternative", {
     url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
     properties: {
       directory: "./pdf" // "c:/Folder"
     }
   });
 
-  ipcRenderer.on("download complete", (event, file) => {
+  ipcRenderer.on("eu-download-alternative-complete", (event, file) => {
     console.log(file); // Full file path
   });
   
-  ipcRenderer.on("download progress", (event, progress) => {
-    console.log(progress); // Progress in fraction, between 0 and 1
+  ipcRenderer.on("eu-download-alternative-progress", (event, progress) => {
     const progressInPercentages = progress * 100; // With decimal point and a bunch of numbers
     const cleanProgressInPercentages = Math.floor(progress * 100); // Without decimal point
+    console.log(progressInPercentages, cleanProgressInPercentages); // Progress in fraction, between 0 and 1
   });
+  
   // Download End -----------------------------------------------------------------------------
 
 });

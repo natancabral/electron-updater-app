@@ -13,19 +13,21 @@
     <h1>Electron Updater App</h1>
     <p id="version"></p>
 
-    <div id="notification" class="hidden">
-      <p id="message"></p>
-      <button id="close-button" onClick="closeNotification()">
-        Close
-      </button>
-      <button id="restart-button" onClick="restartApp()" class="hidden">
-        Restart
-      </button>
-    </div>
-
     We are using Node.js <span id="node-version"></span>,
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>.
 
+    <!-- electron updater - eu -->
+    <div id="eu-notification" class="hidden">
+      <p id="eu-message"></p>
+      <button id="eu-close-button" onClick="euCloseNotification()">
+        Close
+      </button>
+      <button id="eu-restart-button" onClick="euRestartApp()" class="hidden">
+        Restart
+      </button>
+    </div>
+    <!-- electron updater - eu -->
+    
   </body>
 </html>

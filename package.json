@@ -49,9 +49,7 @@
     }],
     "win": {
       "target": [
-        "msi",
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "verifyUpdateCodeSignature": false,
       "icon": "./assets/ico/icon.ico"
@@ -103,17 +101,16 @@
       "artifactName": "${name}-Setup-${version}.${ext}"
     },
     "directories": {
-      "buildResources": "./",
       "output": "dist"
     },
     "files": [
       "assets/**/*",
-      "package.json",
-      ".env",
+      "Xpackage.json",
+      "X.env",
       "*.html",
       "*.js",
       "*.css",
-      "*.yml"
+      "X.yml"
     ]
   }
 }
