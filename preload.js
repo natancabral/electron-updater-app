@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const notification = document.getElementById('notification');
   const message = document.getElementById('message');
   const restartButton = document.getElementById('restart-button');
+  const closeButton = document.getElementById('close-button');
 
   ipcRenderer.send('app_version');
   ipcRenderer.on('app_version', (event, arg) => {
@@ -44,6 +45,9 @@ window.addEventListener('DOMContentLoaded', () => {
   function restartApp() {
     ipcRenderer.send('restart_app');
   }
+
+  closeButton.addEventListener('click',closeNotification);
+  restartButton.addEventListener('click',restartApp);
 
   // Download Start ---------------------------------------------------------------------------
 

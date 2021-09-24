@@ -1,9 +1,19 @@
 const { dialog, app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
-// process.env.GH_TOKEN = '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';
+// Terminal:
+// $ export GH_TOKEN="ghp_nxxx..."
+process.env.GH_TOKEN = 'ghp_9FhfBkEPQJLHw9QQPqtFWb1qvAoFV0gFSNSn';
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = "info";
+
+// if (isDev) {
+//   autoUpdater.updateConfigPath = path.join(__dirname, 'app-update.yml');
+// }
 
 function war(str){
 	dialog.showMessageBox({
@@ -11,10 +21,6 @@ function war(str){
 		title: 'Warning',
 		message: str,
 	});
-}
-
-if (isDev) {
-  autoUpdater.updateConfigPath = path.join(__dirname, 'app-update.yml');
 }
 
 let mainWindow;
@@ -26,6 +32,7 @@ function createWindow () {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
+      nativeWindowOpen: false,
     },
   });
   mainWindow.loadFile('index.html');
@@ -37,47 +44,49 @@ function createWindow () {
     if (isDev) {
       war('Running in development');
     } else {
+      // war('Running in production');
       autoUpdater.checkForUpdates();
       autoUpdater.checkForUpdatesAndNotify();
-      // war('Running in production');
     }
   });
 }
 
 app.on('ready', () => {
-  // createWindow();
+  createWindow();
   console.log('--1--');
 });
 
-app.whenReady().then(() => {
-  createWindow();
-  console.log('--2--');
-  app.on('activate', function () {
-    console.log('--3--');
-    if (BrowserWindow.getAllWindows().length === 0) {
-      console.log('--4--');
-      createWindow();
-    }
-  });
+app.on('activate', function () {
+  if (mainWindow === null) {
+    createWindow();
+  }
 });
+
+// app.whenReady().then(() => {
+//   createWindow();
+//   console.log('--2--');
+//   app.on('activate', function () {
+//     console.log('--3--');
+//     if (BrowserWindow.getAllWindows().length === 0) {
+//       console.log('--4--');
+//       createWindow();
+//     }
+//   });
+// }).catch( err => {
+//   console.log( err );
+// });
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
+    mainWindow == null;
     app.quit();
-  }
+    app.exit();
+}
 });
 
 autoUpdater.on('update-available', () => {
   war('Update available');
   mainWindow.webContents.send('update_available');
-});
-
-ipcMain.on('restart_app', () => {
-  // war('--restart_app');
-  autoUpdater.quitAndInstall();
-  app.relaunch();
-  app.quit(0);
-  mainWindow.quit();
 });
 
 autoUpdater.on('error' , (error) => {
@@ -89,7 +98,7 @@ autoUpdater.on('error' , (error) => {
   } else if(isDev){
   	dialog.showErrorBox('Error(1)', m);
   } else {
-  	// dialog.showErrorBox('Error(2)', m);
+  	dialog.showErrorBox('Error(2)', m);
   }
 });
 
@@ -103,16 +112,12 @@ autoUpdater.on('update-downloaded', (info) => {
   }
   dialog.showMessageBox(message, (res) => {
 
-    autoUpdater.quitAndInstall();
-    app.relaunch();
-    app.quit(0);
-    mainWindow.quit();
-
     if(res === 0) {
       autoUpdater.quitAndInstall();
-      app.relaunch();
-      app.quit(0);
-      mainWindow.quit();
+      // app.relaunch();
+      mainWindow == null;
+      app.quit();
+      app.exit();
     }
   })
 })
@@ -126,6 +131,15 @@ autoUpdater.on('download-progress', function (progressObj) {
 
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
+});
+
+ipcMain.on('restart_app', () => {
+  // war('--restart_app');
+  autoUpdater.quitAndInstall();
+  // app.relaunch();
+  mainWindow == null;
+  app.quit();
+  app.exit();
 });
 
 
@@ -166,16 +180,16 @@ ipcMain.on('app_version', (event) => {
 
 
 // Download Start ---------------------------------------------------------------------------
-const {download} = require("electron-dl");
+// const {download} = require("electron-dl");
 
-ipcMain.on("download", (event, info) => {
-  download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
-    .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
-});
+// ipcMain.on("download", (event, info) => {
+//   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+//     .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
+// });
 
-ipcMain.on("download", (event, info) => {
-  info.properties.onProgress = status => mainWindow.webContents.send("download progress", status);
-  download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
-      .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
-});
+// ipcMain.on("download", (event, info) => {
+//   info.properties.onProgress = status => mainWindow.webContents.send("download progress", status);
+//   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+//       .then(dl => mainWindow.webContents.send("download complete", dl.getSavePath()));
+// });
 // Download End -----------------------------------------------------------------------------

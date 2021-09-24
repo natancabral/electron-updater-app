@@ -1,0 +1,7 @@
+name: electron-updater-app
+productName: "Electron Updater App"
+appId: com.natancabral.electron-updater-app
+owner: natancabral
+repo: electron-updater-app
+provider: github
+url: 'https://github.com/natancabral/electron-updater-app'

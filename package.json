@@ -1,13 +1,14 @@
 {
   "name": "electron-updater-app",
-  "version": "1.0.8",
+  "version": "1.0.2",
   "description": "Electron Updater App - Description",
   "author": {
     "name": "Natan Cabral",
-    "email": "natancabral@hotmail.com"
+    "email": "natancabral@hotmail.com",
+    "url": "http://www.gnnc.com.br"
   },
-  "website": "http://www.gnnc.com.br",
   "main": "main.js",
+  "homepage": "http://www.gnnc.com.br",
   "repository": {
     "type": "git",
     "url": "https://github.com/natancabral/electron-updater-app.git"
@@ -18,36 +19,34 @@
     "start:prod": "electron . APP_DEV=false",
     "deploy": "electron-builder build --publish always",
     "build": "electron-builder build --publish never",
-    "build:win": "electron-builder build --win --publish never",
-    "build:linux": "electron-builder build --linux --publish never",
-    "build:all": "electron-builder build --win --linux --mac --publish never"
+    "build:win": "electron-builder build --win",
+    "build:linux": "electron-builder build --linux",
+    "build:all": "electron-builder build --win --linux --mac"
   },
   "license": "MIT",
   "devDependencies": {
-    "electron": "^14.0.0",
+    "electron": "^15.0.0",
     "electron-builder": "^22.11.7"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
     "electron-dl": "^3.2.1",
     "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.4.1",
     "electron-updater": "^4.3.9"
   },
   "build": {
     "asar": true,
     "extends": null,
-    "appId": "com.natancabral.${name}",
+    "appId": "com.natancabral.electron-updater-app",
     "compression": "maximum",
     "productName": "Electron Updater App",
     "copyright": "Copyright © 2021 ${author}",
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "natancabral",
-        "repo": "electron-updater-app",
-        "url": "https://github.com/natancabral/electron-updater-app"
-      }
-    ],
+    "publish": [{
+      "provider": "github",
+      "owner": "natancabral",
+      "repo": "electron-updater-app"
+    }],
     "win": {
       "target": [
         "msi",
@@ -75,9 +74,7 @@
         "dmg"
       ],
       "icon": "./assets/ico/mac512.icns",
-      "category": "public.app-category.graphics-design",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false
+      "category": "public.app-category.graphics-design"
     },
     "dmg": {
       "artifactName": "${name}-Setup-${version}.${ext}",
@@ -106,15 +103,17 @@
       "artifactName": "${name}-Setup-${version}.${ext}"
     },
     "directories": {
-      "buildResources": "assets",
+      "buildResources": "./",
       "output": "dist"
     },
     "files": [
       "assets/**/*",
+      "package.json",
       ".env",
       "*.html",
       "*.js",
-      "*.css"
+      "*.css",
+      "*.yml"
     ]
   }
 }

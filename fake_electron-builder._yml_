@@ -1,6 +1,8 @@
 ## rename this file to "electron-builder.yml" and REMOVE THIS LINES 
 ## token: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-appId: com.natancabral.ElectronUpdaterApp
+name: electron-updater-app
+productName: "Electron Updater App"
+appId: com.natancabral.electron-updater-app
 publish:
   provider: github
   token: get_your_token_here:https://github.com/settings/tokens
