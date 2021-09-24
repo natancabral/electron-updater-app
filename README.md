@@ -2,10 +2,10 @@
 
 ## Still testing!!! 
 
-- File YML
+- [File YML](https://github.com/settings/tokens)
   - electron-builder.yml
   - get your token here: https://github.com/settings/tokens
-- Change file package.json
+- [Configure](https://github.com/settings/tokens) package.json
   - build > publish
 - Repository Release:
   - Create a realease: https://github.com/natancabral/electron-updater-app/releases
