@@ -182,10 +182,51 @@ ipcMain.on('eu-restart-app', () => {
 // Start Download Alternative
 const {download} = require("electron-dl");
 
-ipcMain.on("eu-download-alternative", (event, info) => {
+function downloadAlternative(info) {
   info.properties.onProgress = status => mainWindow.webContents.send("eu-download-alternative-progress", status);
+  // info.properties.onCompleted = file => mainWindow.webContents.send("eu-download-alternative-completed", file);
+  // info.properties.onProgress = status => console.log(status);
   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
       .then(dl => mainWindow.webContents.send("eu-download-alternative-complete", dl.getSavePath()));
+}
+
+ipcMain.on("eu-download-alternative", (event, info) => {
+  downloadAlternative(info);
 });
 
+// downloadAlternative({
+//   url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
+//   properties: {
+//     // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
+//   }
+// });
+
 // End Download Alternative
+
+// const downloadItems = [];
+// ipcMain.on(
+//   'download-update',
+//   async (event, { url, downloadPath, updateIdentificator }) => {
+//     if (win) {
+//       await download(win, url, {
+//         directory: downloadPath,
+//         onStarted: item => {
+//           downloadItems[updateIdentificator] = item;
+//           win.webContents.send('download-update-started', {
+//             fileName: item.getFilename(),
+//             updateIdentificator,
+//           });
+//         },
+//         onProgress: currentProgress => {
+//           win.webContents.send('download-update-progress', {
+//             currentProgress,
+//             updateIdentificator,
+//           });
+//         },
+//       });
+//       win.webContents.send('download-update-finished', {
+//         updateIdentificator,
+//       });
+//     }
+//   },
+// );

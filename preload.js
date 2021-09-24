@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const notification  = document.getElementById('eu-notification');
   const message       = document.getElementById('eu-message');
-  const progress      = document.getElementById('euProgress');
+  const progress      = document.getElementById('eu-progress');
   const version       = document.getElementById('eu-version');
   const restartButton = document.getElementById('eu-restart-button');
   const closeButton   = document.getElementById('eu-close-button');
@@ -54,7 +54,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Send
   ipcRenderer.send("eu-download-alternative", {
-    url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
+    // url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
+    url: 'https://drive.google.com/file/d/0B2Y-n6IlHYliSXZxMk0xT0NSY1E/preview?resourcekey=0-gvmrtfclyhtYc7zYyvgxCw',
     properties: {
       // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
     }
@@ -69,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const progressInPercentages = progress * 100; // With decimal point and a bunch of numbers
     const cleanProgressInPercentages = Math.floor(progress * 100); // Without decimal point
     console.log(progressInPercentages, cleanProgressInPercentages); // Progress in fraction, between 0 and 1
-    progress.innerText = `${progressInPercentages} ${cleanProgressInPercentages}`;
+    progress.innerHTML = `${progressInPercentages} ${cleanProgressInPercentages}`;
   });
   
   // Download Alternative End -----------------------------------------------------------------------------
