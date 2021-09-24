@@ -2,10 +2,10 @@
 
 ## Still testing!!! 
 
-- [File YML](https://github.com/settings/tokens)
+- [File YML](#file-yml)
   - electron-builder.yml
   - get your token here: https://github.com/settings/tokens
-- [Configure](https://github.com/settings/tokens) package.json
+- [Configure package.json](#configure-package.json)
   - build > publish
 - Repository Release:
   - Create a realease: https://github.com/natancabral/electron-updater-app/releases
@@ -24,7 +24,7 @@ publish:
   token: [YOUR GITHUB ACCESS TOKEN]:https://github.com/settings/tokens
 ```
 
-#### Package.json
+#### Configure package.json
 - Change appId
 ```json
 "appId": "com.natancabral.electron-updater-app",
