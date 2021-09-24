@@ -13,6 +13,7 @@
 
 #### File YML
 - Rename file to electron-builder.yml and change data
+- Get your token: [token](https://github.com/settings/tokens)
 ```yml
 appId: com.natancabral.electron-updater-app
 owner: natancabral
