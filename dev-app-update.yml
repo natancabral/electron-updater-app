@@ -1,0 +1,6 @@
+appId: com.natancabral.electron-updater-app
+owner: natancabral
+repo: electron-updater-app
+provider: github
+url: 'http://localhost/release'
+# url: 'https://github.com/natancabral/electron-updater-app'

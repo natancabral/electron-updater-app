@@ -36,6 +36,7 @@
     "electron-updater": "^4.3.9"
   },
   "build": {
+    "afterPack": "./afterPackHook.js",
     "asar": true,
     "extends": null,
     "appId": "com.natancabral.electron-updater-app",
@@ -94,6 +95,7 @@
     },
     "linux": {
       "target": [
+        "zip",
         "deb",
         "AppImage"
       ],
