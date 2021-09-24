@@ -54,8 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Send
   ipcRenderer.send("eu-download-alternative", {
-    // url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
-    url: 'https://drive.google.com/file/d/0B2Y-n6IlHYliSXZxMk0xT0NSY1E/preview?resourcekey=0-gvmrtfclyhtYc7zYyvgxCw',
+    url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
     properties: {
       // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
     }
