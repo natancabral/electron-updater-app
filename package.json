@@ -42,11 +42,13 @@
     "compression": "maximum",
     "productName": "Electron Updater App",
     "copyright": "Copyright © 2021 ${author}",
-    "publish": [{
-      "provider": "github",
-      "owner": "natancabral",
-      "repo": "electron-updater-app"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "natancabral",
+        "repo": "electron-updater-app"
+      }
+    ],
     "win": {
       "target": [
         "nsis"

@@ -66,7 +66,7 @@ publish:
 
 - On terminal: ```ǹpm run build```
 - Upload all file (./dist)
-- https://github.com/[YOUR-USERNAME]/[YOUR-REPO-NAME]/**releases**
+- https://github.com/[YOUR-USERNAME]/[YOUR-REPO-NAME]/releases
 - Remenber: tag: **v1.0.x** and title: **1.0.x**
 - Semantic Versioning: https://semver.org/
 

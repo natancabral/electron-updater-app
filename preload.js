@@ -15,9 +15,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const notification  = document.getElementById('eu-notification');
   const message       = document.getElementById('eu-message');
-  const version       = document.getElementById('version');
-  const restartButton = document.getElementById('restart-button');
-  const closeButton   = document.getElementById('close-button');
+  const progress      = document.getElementById('euProgress');
+  const version       = document.getElementById('eu-version');
+  const restartButton = document.getElementById('eu-restart-button');
+  const closeButton   = document.getElementById('eu-close-button');
 
   ipcRenderer.send('eu-app-version');
   ipcRenderer.on('eu-app-version', (event, arg) => {
@@ -49,26 +50,28 @@ window.addEventListener('DOMContentLoaded', () => {
   closeButton.addEventListener('click', euCloseNotification);
   restartButton.addEventListener('click', euRestartApp);
 
-  // Download Start ---------------------------------------------------------------------------
+  // Download Alternative Start ---------------------------------------------------------------------------
 
   // Send
   ipcRenderer.send("eu-download-alternative", {
     url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
     properties: {
-      directory: "./pdf" // "c:/Folder"
+      // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
     }
   });
 
   ipcRenderer.on("eu-download-alternative-complete", (event, file) => {
     console.log(file); // Full file path
+    progress.innerHTML = `<a href="${file}" target="_blank"> Open file </a>`;
   });
   
   ipcRenderer.on("eu-download-alternative-progress", (event, progress) => {
     const progressInPercentages = progress * 100; // With decimal point and a bunch of numbers
     const cleanProgressInPercentages = Math.floor(progress * 100); // Without decimal point
     console.log(progressInPercentages, cleanProgressInPercentages); // Progress in fraction, between 0 and 1
+    progress.innerText = `${progressInPercentages} ${cleanProgressInPercentages}`;
   });
   
-  // Download End -----------------------------------------------------------------------------
+  // Download Alternative End -----------------------------------------------------------------------------
 
 });

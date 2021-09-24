@@ -182,7 +182,7 @@ ipcMain.on('eu-restart-app', () => {
 // Start Download Alternative
 const {download} = require("electron-dl");
 
-ipcMain.on("download-alternative", (event, info) => {
+ipcMain.on("eu-download-alternative", (event, info) => {
   info.properties.onProgress = status => mainWindow.webContents.send("eu-download-alternative-progress", status);
   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
       .then(dl => mainWindow.webContents.send("eu-download-alternative-complete", dl.getSavePath()));
