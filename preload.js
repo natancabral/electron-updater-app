@@ -53,12 +53,13 @@ window.addEventListener('DOMContentLoaded', () => {
   // Download Alternative Start ---------------------------------------------------------------------------
 
   // Send
-  ipcRenderer.send("eu-download-alternative", {
-    url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
-    properties: {
-      // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
-    }
-  });
+  // ipcRenderer.send("eu-download-alternative", {
+  //   // url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
+  //   url: 'https://github.com/natancabral/electron-updater-app/releases/download/v1.0.2/electron-updater-app-Setup-1.0.2.exe',
+  //   properties: {
+  //     // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
+  //   }
+  // });
 
   ipcRenderer.on("eu-download-alternative-complete", (event, file) => {
     console.log(file); // Full file path
