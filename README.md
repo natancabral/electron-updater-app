@@ -5,11 +5,11 @@ September 2021
 ## To begin
 
 ```bash
-git clone https://github.com/natancabral/electron-updater-app.git
-cd electron-updater-app
-npm install
-npm run start
-npm run build
+$ git clone https://github.com/natancabral/electron-updater-app.git
+$ cd electron-updater-app
+$ npm install
+$ npm run start
+$ npm run build
 ```
 ## Configure
 
