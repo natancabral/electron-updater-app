@@ -1,5 +1,7 @@
 # Electron Updater App
 
+## To begin
+
 ```bash
 git clone https://github.com/natancabral/electron-updater-app.git
 cd electron-updater-app
@@ -7,7 +9,7 @@ npm install
 npm run start
 npm run build
 ```
-
+## Configure
 
 - [Token](#token)
   - Get your token [here](https://github.com/settings/tokens) or [read this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
