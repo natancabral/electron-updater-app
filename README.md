@@ -20,7 +20,7 @@ repo: electron-updater-app
 url: 'https://github.com/natancabral/electron-updater-app'
 publish:
   provider: github
-  token: get_your_token_here:https://github.com/settings/tokens
+  token: [YOUR GITHUB ACCESS TOKEN]:https://github.com/settings/tokens
 ```
 
 #### Package.json
