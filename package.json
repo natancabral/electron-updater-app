@@ -105,12 +105,9 @@
     },
     "files": [
       "assets/**/*",
-      "Xpackage.json",
-      "X.env",
       "*.html",
       "*.js",
-      "*.css",
-      "X.yml"
+      "*.css"
     ]
   }
 }
