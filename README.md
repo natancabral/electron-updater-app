@@ -3,7 +3,7 @@
 ## Still testing!!! 
 
 - [Token](#token)
-  - get your token [here](https://github.com/settings/tokens)
+  - Get your token [here](https://github.com/settings/tokens) or [read this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 - [File YML](#file-yml)
   - electron-builder.yml
 - [Configure package.json](#configure-packagejson)
@@ -18,8 +18,7 @@
 - [More information](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 #### File YML
-- Rename file to electron-builder.yml and change data
-- Get your token: [token](https://github.com/settings/tokens)
+- Rename **fake_electron-builder.yml** file to **electron-builder.yml** and change data
 ```yml
 appId: com.natancabral.electron-updater-app
 owner: natancabral
@@ -27,8 +26,19 @@ repo: electron-updater-app
 url: 'https://github.com/natancabral/electron-updater-app'
 publish:
   provider: github
-  token: [YOUR GITHUB ACCESS TOKEN]:https://github.com/settings/tokens
+  token: [YOUR GITHUB ACCESS TOKEN]
 ```
+- Sample:
+```yml
+appId: com.[yourusername].[repo]
+owner: [yourusername]
+repo: [repo]
+url: 'https://github.com/[yourusername]/[repo]'
+publish:
+  provider: github
+  token: [token]
+```
+
 
 #### Configure package.json
 - Change appId
