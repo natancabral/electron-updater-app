@@ -54,21 +54,21 @@ publish:
 #### Configure package.json
 - Change appId
 ```json
-"appId": "com.natancabral.electron-updater-app",
+"appId": "com.[yourusername].[repo]",
 ```
 - Change publish
 ```json
 "publish": [{
   "provider": "github",
-  "owner": "natancabral",
-  "repo": "electron-updater-app"
+  "owner": "[yourusername]",
+  "repo": "[repo]"
 }],
 ```
 #### Release
 
 - On terminal: ```ǹpm run build```
 - Upload all file (./dist)
-- https://github.com/[YOUR-USERNAME]/[YOUR-REPO-NAME]/releases
+- https://github.com/[[yourusername]]/[repo]/releases
 - Remenber: tag: **v1.0.x** and title: **1.0.x**
 - Semantic Versioning: https://semver.org/
 
