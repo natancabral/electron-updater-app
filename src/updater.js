@@ -52,9 +52,13 @@ function init (mainWindow){
     // message filter    
     if(message === 'No published versions on GitHub') {
       message = 'Sem versões publicadas';
-    } else if(String(message).includes('Cannot download') && String(message).includes('Cannot download')){
+    } else if(String(message).includes('Cannot download')){
       // const url = String(message).split('"');
       message = `Cannot download`;
+    } else if(String(message).includes('ENOENT: no such file or directory, open') && String(message).includes('.yml')){
+      message = `YML file  not found (local)`;
+    } else if(String(message).includes('.yml in the latest release artifacts')){
+      message = `YML file  not found (http)`;
     } else if(isDev){
       message = `Error(Dev): ${message}`;
     } else {
