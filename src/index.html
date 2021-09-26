@@ -11,20 +11,22 @@
   <body>
 
     <h1>Electron Updater App</h1>
-    <p id="eu-version"></p>
-    <p id="eu-progress"></p>
+    <p id="version"></p>
+    <p id="progress"></p>
 
     We are using Node.js <span id="node-version"></span>,
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>.
 
+    <div id="container-messages"></div>
+
     <!-- electron updater - eu -->
-    <div id="eu-notification" class="hidden">
-      <p id="eu-message"></p>
-      <button id="eu-close-button" onClick="euCloseNotification()">
-        Close
+    <div id="notification" class="hidden">
+      <p id="notification-message"></p>
+      <button id="notification-cancel-button">
+        Cancel
       </button>
-      <button id="eu-restart-button" onClick="euRestartApp()" class="hidden">
+      <button id="notification-restart-button" class="hidden">
         Restart
       </button>
     </div>
