@@ -5,10 +5,10 @@
   "author": {
     "name": "Natan Cabral",
     "email": "natancabral@hotmail.com",
-    "url": "http://www.gnnc.com.br"
+    "url": "https://github.com/natancabral"
   },
   "main": "./src/main.js",
-  "homepage": "http://www.gnnc.com.br",
+  "homepage": "https://github.com/natancabral/electron-updater-app",
   "repository": {
     "type": "git",
     "url": "https://github.com/natancabral/electron-updater-app.git"

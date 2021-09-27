@@ -139,8 +139,10 @@ function downloadAltertive() {
 
 function checkForUpdates () {
   try {
-    autoUpdater.checkForUpdates();
-    autoUpdater.checkForUpdatesAndNotify();
+    if(!isDev){
+      autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();  
+    }
   } catch (error) {} 
 }
 
