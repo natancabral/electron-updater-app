@@ -62,7 +62,7 @@ ipcMain.on('version-app', (event) => {
 
 ipcMain.on('restart-app', () => {
   updater.quitAndInstall();
-  app.relaunch();
+  // app.relaunch();
   exitAll();
 });
 

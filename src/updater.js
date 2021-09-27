@@ -108,7 +108,7 @@ function init (mainWindow){
   // autoUpdater
   autoUpdater.on('download-progress', function (data) {
     let message = '';
-    message += `Speed ${data.bytesPerSecond} - `;
+    // message += `Speed ${data.bytesPerSecond} - `;
     message += `Downloaded ${parseInt(data.percent)}% `;
     // message += `(${data.transferred} / ${data.total}) `;
     // mainWindow.webContents.send('update-download-progress', message);

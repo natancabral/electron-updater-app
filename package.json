@@ -61,7 +61,6 @@
     "nsis": {
       "shortcutName": "${productName}",
       "artifactName": "${name}-Setup-${version}.${ext}",
-      "installerIcon": "./assets/ico/icon.ico",
       "oneClick": true,
       "perMachine": true,
       "allowElevation": true,
