@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   const { ipcRenderer } = require('electron');
-  const { dialog: messages } = require('./locale/messages-en');
+  const messages = require('./locale/messages-en');
 
   const notification        = document.getElementById('notification');
   const notificationMessage = document.getElementById('notification-message');
