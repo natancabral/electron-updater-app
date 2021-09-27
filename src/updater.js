@@ -3,7 +3,7 @@ const { autoUpdater } = require('electron-updater');
 const download = require('./download');
 const isDev = require('electron-is-dev');
 const {version} = require('../package.json');
-const messages = require('./locale/messages-en');
+const messages = require('./messages-en');
 const os = require('os');
 // const log = require('electron-log');
 
