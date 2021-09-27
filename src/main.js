@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+// --- electron-updater-app ---
 const updater = require('./updater');
+// --- electron-updater-app ---
 
 let mainWindow;
 
@@ -11,7 +13,9 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
+      // --- electron-updater-app ---
       preload: path.join(__dirname, 'preload.js'),
+      // --- electron-updater-app ---
       nodeIntegration: true,
       nativeWindowOpen: false,
     },
@@ -23,10 +27,12 @@ function createWindow() {
     mainWindow = null;
   });
 
+  // --- electron-updater-app ---
   mainWindow.once('ready-to-show', () => {
     updater.init(); // auto update
     updater.checkForUpdates();
   });
+  // --- electron-updater-app ---
   
 }
 
@@ -56,13 +62,13 @@ ipcMain.on('version-app', (event) => {
   event.sender.send('version-app', { version: app.getVersion() });
 });
 
+// --- electron-updater-app ---
 ipcMain.on('restart-app', () => {
   updater.quitAndInstall();
   // app.relaunch();
   exitAll();
 });
-
-// End Download Alternative
+// --- electron-updater-app ---
 
 // BrowserWindow Trigger
 // will-finish-launching: Triggered when the application completes the basic startup
