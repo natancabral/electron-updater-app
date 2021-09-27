@@ -1,7 +1,7 @@
 const {BrowserWindow, ipcRenderer} = require('electron');
 const down = require("electron-dl").download;
 const {latestStableVersion} =  require("latest-stable-version");
-const { dialog: messages } = require('./locale/messages.en');
+const { dialog: messages } = require('./locale/messages-en');
 const package = require('./../package.json');
 const os = require('os');
 
