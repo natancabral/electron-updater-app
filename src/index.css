@@ -22,15 +22,7 @@ body {
 .hidden {
   display: none;
 }
-
-#messages-container {
-  z-index: 9999;
-  background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  position: fixed;
-  border-radius: 5px;
-  top: 15px;
-  right: 15px;
+#container-messages {
   margin: 0;
 }
 .alert-info {
@@ -47,7 +39,6 @@ body {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }

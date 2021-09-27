@@ -1,26 +1,149 @@
-// const {ipcMain, BrowserWindow} = require('electron');
-// const {download} = require("electron-dl");
+const {BrowserWindow, ipcRenderer} = require('electron');
+const down = require("electron-dl").download;
+const {latestStableVersion} =  require("latest-stable-version");
+const { dialog: messages } = require('./locale/messages.en');
+const package = require('./../package.json');
+const os = require('os');
 
-// function downloadAlternative(info) {
-//   info.properties.onProgress = status => mainWindow.webContents.send("download-alternative-progress", status);
-//   // info.properties.onCompleted = file => mainWindow.webContents.send("download-alternative-completed", file);
-//   // info.properties.onProgress = status => console.log(status);
-//   download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
-//       .then(dl => mainWindow.webContents.send("download-alternative-complete", dl.getSavePath()));
-// }
+var latestVersion = 0;
+var tryLatestVersion = true;
 
-// ipcMain.on("eu-download-alternative", (event, info) => {
-//   downloadAlternative(info);
-// });
+function content() {
+  // let mainWindow = BrowserWindow.getFocusedWindow();
+  let mainWindow = BrowserWindow.getAllWindows()[0];
+  return mainWindow.webContents || ipcRenderer;
+}
 
-// downloadAlternative({
-//   url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
-//   properties: {
-//     openFolderWhenDone: true,
-//     saveAs: true, 
-//     // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
-//   }
-// });
+function getLatestRelease () {
+  const { owner, repo } = package.build.publish[0];
+  if(tryLatestVersion){
+    tryLatestVersion = false;
+    latestStableVersion({
+      owner: owner,
+      repo: repo,
+    }).then( version => {
+      latestVersion = version;  
+    }).catch( err => tryLatestVersion = true);  
+  }
+};
+
+function getURLRelease() {
+
+  if(!latestVersion) getLatestRelease();
+
+  const { owner, repo } = package.build.publish[0];  
+
+  let ext = '';
+
+  switch(os.platform()) {
+    case 'darwin': ext = 'dmg';
+    case 'win32': ext = 'exe';
+    case 'win64': ext = 'exe';
+    case 'linux': ext = 'deb';
+  }
+
+  let url = `https://github.com/${owner}/${repo}/releases/download/v${latestVersion}/${repo}-Setup-${latestVersion}.${ext}`;
+
+  content().send('message',{type:'aq', message:url});
+  return url;
+}
+
+
+function downloadProgress(progress) {
+  content().send('message', { type: 'download-progress', message: `Completed: ${progress.percent * 100 >> 0}%` });
+}
+
+function downloadComplete(file) {
+  let message;
+  let type;
+  if('errorTitle' in file || 'errorMessage' in file) { // file.hasOwnProprety(errorTitle)
+    type = 'download-error';
+    message = messages.download_error;
+  } else {
+    type = 'download-completed';
+    message = messages.download_complete;
+  }
+  content().send('message', { type, message });
+}
+
+function onCancel(file) {
+  content().send('message', { type: 'download-alternative-canceled', message: messages.download_canceled });
+}
+
+/**
+ * 
+ * @param {String} url 
+ * @param {Object} properties 
+ * properties: {
+ *   openFolderWhenDone: true,
+ *   saveAs: true, 
+ *   // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
+ * },
+ */
+function download(url, properties) {
+
+  let info = {
+    url: url,
+    properties: {
+      openFolderWhenDone: true,
+      saveAs: true, 
+      // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
+    },
+  };
+
+  if(properties) {
+    info = {...info, properties: {...info.properties, ...properties}};
+  }
+
+  info.properties.onProgress = downloadProgress;
+  info.properties.onCompleted = downloadComplete;
+  info.properties.onCancel = onCancel;
+
+  return down(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+  // .then( dl => {
+  //   console.log('complete:', dl); // Full file path
+  //   console.log('complete:file:', dl.getSavePath());
+  // });
+}
+
+function checkForUpdates(callback) {
+
+  if(!latestVersion){
+    getLatestRelease()
+    setTimeout(checkForUpdatesAndDownload,3000);
+    return;
+  }
+
+  const url = getURLRelease();
+  if(url){
+    // message
+    content().send('message',{ type: 'download-alternative-found', message: messages.download_alternative_found});  
+    // channel found
+    content().send('download-alternative-found');
+    if(callback) callback();
+  }
+}
+
+function checkForUpdatesAndDownload() {
+
+  if(!latestVersion){
+    getLatestRelease()
+    setTimeout(checkForUpdatesAndDownload,3000);
+    return;
+  }
+
+  const url = getURLRelease();
+  if(url){
+    content().send('message',{ type: 'download-alternative-found', message: url});  
+    download(url);
+  }
+}
+
+module.exports = {
+  download,
+  checkForUpdates,
+  checkForUpdatesAndDownload
+}
 
 // End Download Alternative
 
@@ -33,19 +156,19 @@
 //         directory: downloadPath,
 //         onStarted: item => {
 //           downloadItems[updateIdentificator] = item;
-//           win.webContents.send('download-update-started', {
+//           win.content().send('download-update-started', {
 //             fileName: item.getFilename(),
 //             updateIdentificator,
 //           });
 //         },
 //         onProgress: currentProgress => {
-//           win.webContents.send('download-update-progress', {
+//           win.content().send('download-update-progress', {
 //             currentProgress,
 //             updateIdentificator,
 //           });
 //         },
 //       });
-//       win.webContents.send('download-update-finished', {
+//       win.content().send('download-update-finished', {
 //         updateIdentificator,
 //       });
 //     }
@@ -56,4 +179,3 @@
 // https://stackoverflow.com/questions/46102851/electron-download-a-file-to-a-specific-location#48231664
 // https://ourcodeworld.com/articles/read/228/how-to-download-a-webfile-with-electron-save-it-and-show-download-progress
 // https://github.com/sindresorhus/electron-dl
-// https://developpaper.com/electron-download-exe-file-update/

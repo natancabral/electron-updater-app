@@ -1,11 +1,10 @@
-const { app, BrowserWindow, ipcMain, webContents } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const updater = require('./updater');
 
 let mainWindow;
 
 // Init
-
 function createWindow() {
 
   mainWindow = new BrowserWindow({
@@ -25,14 +24,13 @@ function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
-    updater.init(mainWindow);
-    updater.checkForUpdates(mainWindow);
+    updater.init(); // auto update
+    updater.checkForUpdates();
   });
   
 }
 
 // Ready
-
 app.whenReady().then(() => {
   createWindow();
   app.on('activate', function () {
@@ -54,8 +52,6 @@ function exitAll() {
   app.exit();
 }
 
-// ipcMain
-
 ipcMain.on('version-app', (event) => {
   event.sender.send('version-app', { version: app.getVersion() });
 });
@@ -65,30 +61,6 @@ ipcMain.on('restart-app', () => {
   // app.relaunch();
   exitAll();
 });
-
-// Download Alternative
-
-const {download} = require("electron-dl");
-
-function downloadAlternative(info) {
-  info.properties.onProgress = status => mainWindow.webContents.send("eu-download-alternative-progress", status);
-  info.properties.onCompleted = file => mainWindow.webContents.send("eu-download-alternative-completed", file);
-  download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
-      .then(dl => mainWindow.webContents.send("eu-download-alternative-complete", dl.getSavePath()));
-}
-
-ipcMain.on("eu-download-alternative", (event, info) => {
-  downloadAlternative(info);
-});
-
-// downloadAlternative({
-//   url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
-//   properties: {
-//     openFolderWhenDone: true,
-//     saveAs: true, 
-//     // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
-//   }
-// });
 
 // End Download Alternative
 

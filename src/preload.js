@@ -2,8 +2,6 @@
 // It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
 
-  const { ipcRenderer } = require('electron');
-
   const replaceText = (selector, text) => {
     const element = document.getElementById(selector)
     if (element) element.innerText = text
@@ -13,16 +11,18 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 
+  const { ipcRenderer } = require('electron');
+  const { dialog: messages } = require('./locale/messages.en');
+
   const notification        = document.getElementById('notification');
   const notificationMessage = document.getElementById('notification-message');
-  const progress            = document.getElementById('notification-progress');
-  const restartButton       = document.getElementById('notification-restart-button');
   const cancelButton        = document.getElementById('notification-cancel-button');
+  const restartButton       = document.getElementById('notification-restart-button');
+  const downloadButton      = document.getElementById('notification-download-button');
   const version             = document.getElementById('version');
-  const containerMessages   = document.getElementById('container-messages');
   
   /*
-  on 
+  [on] 
   version-app
   update-error
   update-checking
@@ -30,42 +30,30 @@ window.addEventListener('DOMContentLoaded', () => {
   update-not-available
   update-downloaded
   update-download-progress
-  send
+  [send]
   version-app
   */
 
   // Message ----------------------------------------------
 
-  let lastMsgId = 0;
   function showMessage(data) {
 
-    let {type, message, hide, replaceAll} = data;
-
-    hide = (hide === undefined) ? true : hide;
-    replaceAll = (replaceAll === undefined) ? false : replaceAll;
+    let {type, message, hide} = data;
 
     if(type === 'update-downloaded'){
-      restartButton.classList.remove('hidden');
+      restartButton.classList.remove('hidden'); // hidden
     }
 
-    notification.classList.remove('hidden');
+    notification.classList.remove('hidden'); // hidden
+    notification.classList.add('fadeIn')
     notificationMessage.innerText = message;
 
-    const msgId = lastMsgId++ + 1
-    const msgTemplate = `<div id="${msgId}" class="alert alert-info alert-info-message animated fadeIn">${message}</div>`
-  
-    if (replaceAll) {
-      containerMessages.innerHTML = msgTemplate
-    } else {
-      containerMessages.insertAdjacentHTML('afterbegin', msgTemplate)
-    }
-  
     if (hide) {
       setTimeout(() => {
-        const msgEl = document.getElementById(msgId)
-        msgEl.classList.remove('fadeIn')
-        msgEl.classList.add('fadeOut')
-      }, 4000);
+        notification.classList.add('hidden');
+        notification.classList.remove('fadeIn');
+        notification.classList.add('fadeOut');
+      }, 3000);
     }
   }
 
@@ -77,89 +65,26 @@ window.addEventListener('DOMContentLoaded', () => {
     showMessage(data);
   })
 
-  // Message ----------------------------------------------
+  cancelButton.addEventListener('click',() => notification.classList.add('hidden'));
+  restartButton.addEventListener('click',() => ipcRenderer.send('restart-app'));
 
-  // ipcRenderer.on('update-error', (event, error) => {
-  //   message.innerHTML = `${error}`;
-  //   notification.classList.remove('hidden');
-  //   console.log(error);
-  //   // ipcRenderer.removeAllListeners('update-error');
-  // });
+  // Download Alternative
 
-  // ipcRenderer.on('update-checking', () => {
-  //   message.innerText = `Checking update...`;
-  //   notification.classList.remove('hidden');
-  //   // ipcRenderer.removeAllListeners('update-checking');
-  // });
+  ipcRenderer.on('download-alternative-check-for-updates', (event, data) => {
+    downloadButton.classList.remove('hidden');
+  });
 
-  // ipcRenderer.on('update-available', () => {
-  //   message.innerText = 'A new update is available. Downloading now...';
-  //   notification.classList.remove('hidden');
-  //   // ipcRenderer.removeAllListeners('update-available');
-  // });
+  ipcRenderer.on('download-alternative-found', (event, data) => {
+    downloadButton.classList.remove('hidden');
+    downloadButton.addEventListener('click',() => ipcRenderer.send('restart-app', 'download-alternative-check-for-updates-and-download'));
+  });
 
-  // ipcRenderer.on('update-not-available', () => {
-  //   message.innerText = 'Not update available.';
-  //   notification.classList.add('hidden');
-  //   // ipcRenderer.removeAllListeners('update-available');
-  // });
-
-  // ipcRenderer.on('update-downloaded', () => {
-  //   message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
-  //   notification.classList.remove('hidden');
-  //   restartButton.classList.remove('hidden');
-  //   // ipcRenderer.removeAllListeners('update-downloaded');
-  // });
-
-  // ipcRenderer.on('update-download-progress', (event, data) => {
-  //   message.innerText = data;
-  //   notification.classList.remove('hidden');
-  //   restartButton.classList.remove('hidden');
-  //   // ipcRenderer.removeAllListeners('update-download-progress');
-  // });
+  // Version
 
   ipcRenderer.send('version-app');
   ipcRenderer.on('version-app', (event, arg) => {
-    version.innerText = `Version ${arg.version}`;
+    version.innerText = `${messages.version} ${arg.version}`;
     ipcRenderer.removeAllListeners('version-app');
   });
-
-  function cancelNotification() {
-    notification.classList.add('hidden');
-  }
-
-  function restartApp() {
-    ipcRenderer.send('restart-app');
-  }
-
-  cancelButton.addEventListener('click', cancelNotification);
-  restartButton.addEventListener('click', restartApp);
-
-  // Download Alternative Start ---------------------------------------------------------------------------
-
-  // Send
-  // ipcRenderer.send("download-alternative", {
-  //   // url: "https://github.com/natancabral/pdfkit-table/raw/main/example/document.pdf",
-  //   url: 'https://github.com/natancabral/electron-updater-app/releases/download/v1.0.2/electron-updater-app-Setup-1.0.2.exe',
-  //   properties: {
-  //     openFolderWhenDone: true,
-  //     saveAs: true, 
-  //     // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
-  //   }
-  // });
-
-  ipcRenderer.on("download-alternative-complete", (event, file) => {
-    console.log(file); // Full file path
-    progress.innerHTML = `<a href="${file}" target="_blank"> Open file </a>`;
-  });
-  
-  ipcRenderer.on("download-alternative-progress", (event, progress) => {
-    const progressInPercentages = progress * 100; // With decimal point and a bunch of numbers
-    const cleanProgressInPercentages = Math.floor(progress * 100); // Without decimal point
-    console.log(progressInPercentages, cleanProgressInPercentages); // Progress in fraction, between 0 and 1
-    progress.innerHTML = `${progressInPercentages} ${cleanProgressInPercentages}`;
-  });
-  
-  // Download Alternative End -----------------------------------------------------------------------------
 
 });

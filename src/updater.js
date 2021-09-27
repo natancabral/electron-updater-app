@@ -1,12 +1,20 @@
-const { dialog, ipcRenderer } = require('electron');
+const { dialog, BrowserWindow, ipcRenderer } = require('electron');
 const { autoUpdater } = require('electron-updater');
-// const os = require('os');
-const log = require('electron-log');
+const download = require('./download');
 const isDev = require('electron-is-dev');
 const {version} = require('../package.json');
+const { dialog: messages } = require('./locale/messages.en');
+const os = require('os');
+// const log = require('electron-log');
 
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = "info";
+// autoUpdater.logger = log;
+// autoUpdater.logger.transports.file.level = "info";
+
+function content() {
+  // let mainWindow = BrowserWindow.getFocusedWindow();
+  let mainWindow = BrowserWindow.getAllWindows()[0];
+  return mainWindow.webContents || ipcRenderer;  
+}
 
 let initialized = false;
 // let updateFeed = '';
@@ -24,8 +32,18 @@ let initialized = false;
 //   updateFeed = `${nutsURL}/update/${platform}/${version}`
 // }
 
+// var opsys = os.platform();
+// if (opsys == "darwin") {
+//     opsys = "MacOS";
+// } else if (opsys == "win32" || opsys == "win64") {
+//     opsys = "Windows";
+// } else if (opsys == "linux") {
+//     opsys = "Linux";
+// }
+// console.log(opsys) // I don't know what linux is.
+
 /* 
-// on
+[on]
 message
 update-error
 update-checking
@@ -33,11 +51,11 @@ update-available
 update-not-available
 update-downloaded
 update-download-progress
-// send
+[send]
 restart-app
 */
 
-function init (mainWindow){
+function init (){
 
   if (initialized || isDev) {
     message(`Running in development ${version}`);
@@ -50,50 +68,43 @@ function init (mainWindow){
   autoUpdater.on('error' , (error) => {
     let { message } = error;
     // message filter    
-    if(message === 'No published versions on GitHub') {
-      message = 'Sem versões publicadas';
+    if(message === messages.no_published_versions_on_github) {
+      message = messages.no_versions_published;
     } else if(String(message).includes('Cannot download')){
       // const url = String(message).split('"');
-      message = `Cannot download`;
+      message = messages.cannot_download;
     } else if(String(message).includes('ENOENT: no such file or directory, open') && String(message).includes('.yml')){
-      message = `YML file  not found (local)`;
+      message = messages.yml_file_not_found_local;
     } else if(String(message).includes('.yml in the latest release artifacts')){
-      message = `YML file  not found (http)`;
+      message = messages.yml_file_not_found_http;
     } else if(isDev){
       message = `Error(Dev): ${message}`;
     } else {
       message = `${message}`;
     }
-    // send to window event
-    // mainWindow.webContents.send('update-error', message);
-    mainWindow.webContents.send('message', { type: 'update-error', message: `😱 Error: ${message}` });
+    // message
+    content().send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
+    // downalod alternative
+    downloadAltertive();
   });
 
   autoUpdater.once('checking-for-update', (ev, err) => {
-    // send to window event
-    // mainWindow.webContents.send('update-checking');
-    mainWindow.webContents.send('message', { type: 'update-checking', message: '🔎 Checking for updates' });
+    content().send('message', { type: 'update-checking', message: messages.checking_for_updates });
   });
 
   autoUpdater.once('update-available', () => {
-    // send to window event
-    // mainWindow.webContents.send('update-available');
-    mainWindow.webContents.send('message', { type: 'update-available', message: '🎉 Update available. Downloading ⌛️' }); // , hide: false
+    content().send('message', { type: 'update-available', message: messages.update_avaliable_downloading }); // , hide: false
   });
 
   autoUpdater.once('update-not-available', (ev, err) => {
-    // send to window event
-    // mainWindow.webContents.send('update-not-available');
-    mainWindow.webContents.send('message', { type: 'update-not-available', message: '👎 Update not available' });
+    content().send('message', { type: 'update-not-available', message: messages.update_not_avaliable });
   });
 
   autoUpdater.on('update-downloaded', (info) => {
-    // send to window event
-    // mainWindow.webContents.send('update-downloaded');
-    mainWindow.webContents.send('message', { type: 'update-downloaded', message: '👍 Downloaded' });
+    content().send('message', { type: 'update-downloaded', message: messages.downloaded });
     // const message = {
     //   type: 'info',
-    //   buttons: ['Restart', 'Update', 'Cancel'],
+    //   buttons: ['Restart and Upgrade', 'Cancel'],
     //   title: `Update`,
     //   message: 'Do you want to do this?',
     //   detail: `A new version has been downloaded. Restart to apply the updates.`
@@ -108,13 +119,22 @@ function init (mainWindow){
   // autoUpdater
   autoUpdater.on('download-progress', function (data) {
     let message = '';
-    // message += `Speed ${data.bytesPerSecond} - `;
-    message += `Downloaded ${parseInt(data.percent)}% `;
+    // message += `${messages.download_progress_speed} ${data.bytesPerSecond} - `;
+    message += `${messages.download_progress_downloaded} ${parseInt(data.percent)}% `;
     // message += `(${data.transferred} / ${data.total}) `;
-    // mainWindow.webContents.send('update-download-progress', message);
-    mainWindow.webContents.send('message', { type: 'update-download-progress', message: message });
+    // content().send('update-download-progress', message);
+    content().send('message', { type: 'update-download-progress', message: message });
   });
 
+}
+
+function downloadAltertive() {
+  setTimeout(() => {
+    content().send('message', { type: 'download-alternative-starting', message: `Save file to update` });
+    setTimeout(() => {
+      download.checkForUpdatesAndDownload();
+    },2000);
+  },2000);
 }
 
 function checkForUpdates () {
