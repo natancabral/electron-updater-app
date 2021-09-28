@@ -10,7 +10,7 @@ module.exports = {
   // messages
   checking_for_updates: '🔎 Checking for updates',
   update_avaliable_downloading: '🎉 Update available. Downloading ⌛️',
-  update_not_avaliable: 'Updated!',
+  update_not_avaliable: '🍀 Upgraded',
   downloaded: '🏆 Downloaded',
   download_progress_speed: 'Speed',
   download_progress_downloaded: '🚀 Downloaded',

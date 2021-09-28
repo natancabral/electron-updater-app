@@ -55,9 +55,6 @@ function getRelease() {
         return;
       }
       
-      content().send('message', { type: 'download-alternative-canceled', message: messages.download_canceled });
-      return;
-
       let extension = '';
       let url = template;
     
@@ -168,8 +165,8 @@ function checkForUpdatesAndDownload() {
       content().send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
     });
     
-  }).catch( error => {
-    content().send('message',{ type: 'download-alternative-error', message: messages.download_error });
+  }).catch( data => {
+    content().send('message',{ type: 'download-alternative-error', message: data.error || messages.download_error, hide: true });
   });
 
 }
