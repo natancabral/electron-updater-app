@@ -1,8 +1,7 @@
-# Electron Updater App
 
 <center>
+# Electron Updater App
 <img src="/src/assets/screen-update-avaliable.png"/>
-screen-update-avaliable.png
 </center>
 
 ## To begin
