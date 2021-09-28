@@ -1,12 +1,11 @@
 const { dialog, BrowserWindow, ipcRenderer } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const download = require('./download');
 const isDev = require('electron-is-dev');
+const download = require('./download');
 const {version} = require('../package.json');
 const messages = require('./messages-en');
-const os = require('os');
-// const log = require('electron-log');
 
+// const log = require('electron-log');
 // autoUpdater.logger = log;
 // autoUpdater.logger.transports.file.level = "info";
 
@@ -23,24 +22,6 @@ let initialized = false;
 // https://github.com/GitbookIO/nuts
 // const nutsURL = 'https://electron-autoupdater-starter-server.now.sh';
 // const platform = `${os.platform()}_${os.arch()}`;
-
-// if (os.platform() === 'darwin') {
-//   updateFeed = `${nutsURL}/update/${platform}/${version}`
-// } else if (os.platform() === 'win32') {
-//   updateFeed = `${nutsURL}/update/win32/${version}`
-// } else {
-//   updateFeed = `${nutsURL}/update/${platform}/${version}`
-// }
-
-// var opsys = os.platform();
-// if (opsys == "darwin") {
-//     opsys = "MacOS";
-// } else if (opsys == "win32" || opsys == "win64") {
-//     opsys = "Windows";
-// } else if (opsys == "linux") {
-//     opsys = "Linux";
-// }
-// console.log(opsys) // I don't know what linux is.
 
 /* 
 [on]
@@ -139,10 +120,8 @@ function downloadAltertive() {
 
 function checkForUpdates () {
   try {
-    if(!isDev){
-      autoUpdater.checkForUpdates();
-      autoUpdater.checkForUpdatesAndNotify();  
-    }
+    autoUpdater.checkForUpdates();
+    autoUpdater.checkForUpdatesAndNotify();  
   } catch (error) {} 
 }
 

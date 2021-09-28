@@ -7,6 +7,13 @@
     "email": "natancabral@hotmail.com",
     "url": "https://github.com/natancabral"
   },
+  "release": {
+    "provider": "github",
+    "owner": "natancabral",
+    "repo": "electron-updater-app",
+    "releases": "https://github.com/natancabral/electron-updater-app/releases/",
+    "template": "https://github.com/[owner]/[repo]/releases/download/v[version]/[repo]-Setup-[version].[extension]"
+  },
   "main": "./src/main.js",
   "homepage": "https://github.com/natancabral/electron-updater-app",
   "repository": {
@@ -39,7 +46,7 @@
   },
   "build": {
     "afterPack": "./afterPackHook.js",
-    "asar": true,
+    "asar": false,
     "extends": null,
     "appId": "com.natancabral.electron-updater-app",
     "compression": "maximum",
@@ -111,7 +118,8 @@
       "src/assets/**/*",
       "src/*.html",
       "src/*.js",
-      "src/*.css"
+      "src/*.css",
+      "publish.json"
     ]
   }
 }

@@ -1,0 +1,7 @@
+{
+  "provider": "github",
+  "owner": "natancabral",
+  "repo": "electron-updater-app",
+  "repository": "https://github.com/natancabral/electron-updater-app/releases/",
+  "url": ""
+}

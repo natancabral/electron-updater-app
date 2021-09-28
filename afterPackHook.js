@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 exports.default = async (context) => {
-  console.log("after pack hook - rename files");
+  console.log("after pack hook");
 };
 
 /*

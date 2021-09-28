@@ -1,11 +1,10 @@
 const {BrowserWindow, ipcRenderer} = require('electron');
-const down = require("electron-dl").download;
 const {latestStableVersion} =  require("latest-stable-version");
+const down = require("electron-dl").download;
 const messages = require('./messages-en');
-const package = require('./../package.json');
+const {release} = require('./../package.json');
 const os = require('os');
 
-var latestVersion = 0;
 var tryLatestVersion = true;
 
 function content() {
@@ -14,40 +13,48 @@ function content() {
   return mainWindow.webContents || ipcRenderer;
 }
 
-function getLatestRelease () {
-  const { owner, repo } = package.build.publish[0];
-  if(tryLatestVersion){
-    tryLatestVersion = false;
+function getRelease() {
+  
+  if(!tryLatestVersion) return;
+
+  const { owner, repo, template} = release;
+
+  return new Promise((resolve, reject) => {
     latestStableVersion({
       owner: owner,
       repo: repo,
     }).then( version => {
-      latestVersion = version;  
-    }).catch( err => tryLatestVersion = true);  
-  }
-};
+      
+      let extension = '';
+      let url = template;
+    
+      switch(os.platform()) {
+        case 'darwin': extension = 'dmg';
+        case 'win32':  extension = 'exe';
+        case 'win64':  extension = 'exe';
+        case 'linux':  extension = 'deb';
+      }
 
-function getURLRelease() {
+      url = url.replace(/\[owner\]/g, owner);
+      url = url.replace(/\[repo\]/g, repo);
+      url = url.replace(/\[extension\]/g, extension);
+      url = url.replace(/\[version\]/g, version);
 
-  if(!latestVersion) getLatestRelease();
+      if(!owner || !repo || !extension || !version) {
+        reject(url);
+        return;
+      }
 
-  const { owner, repo } = package.build.publish[0];  
+      resolve(url);
 
-  let ext = '';
+    }).catch( error => {
 
-  switch(os.platform()) {
-    case 'darwin': ext = 'dmg';
-    case 'win32': ext = 'exe';
-    case 'win64': ext = 'exe';
-    case 'linux': ext = 'deb';
-  }
+      tryLatestVersion = true;
+      resolve(error);
 
-  let url = `https://github.com/${owner}/${repo}/releases/download/v${latestVersion}/${repo}-Setup-${latestVersion}.${ext}`;
-
-  content().send('message',{type:'aq', message:url});
-  return url;
+    });
+  });
 }
-
 
 function downloadProgress(progress) {
   content().send('message', { type: 'download-progress', message: `Completed: ${progress.percent * 100 >> 0}%` });
@@ -106,43 +113,31 @@ function download(url, properties) {
   // });
 }
 
-function checkForUpdates(callback) {
+function checkForUpdates() {
 
-  if(!latestVersion){
-    getLatestRelease()
-    setTimeout(checkForUpdatesAndDownload,3000);
-    return;
-  }
-
-  const url = getURLRelease();
-  if(url){
-    // message
-    content().send('message',{ type: 'download-alternative-found', message: messages.download_alternative_found});  
-    // channel found
+  getRelease().then( () => {
+    content().send('message',{ type: 'download-alternative-found', message: messages.download_found });
     content().send('download-alternative-found');
-    if(callback) callback();
-  }
+  }).catch( error => {
+    content().send('message',{ type: 'download-alternative-error', message: messages.download_error});
+  });
+
 }
 
 function checkForUpdatesAndDownload() {
 
-  if(!latestVersion){
-    getLatestRelease()
-    setTimeout(checkForUpdatesAndDownload,3000);
-    return;
-  }
-
-  const url = getURLRelease();
-  if(url){
-    content().send('message',{ type: 'download-alternative-found', message: url});  
+  getRelease().then( url => {
     download(url);
-  }
+  }).catch( error => {
+    content().send('message',{ type: 'download-alternative-error', message: messages.download_error });
+  });
+
 }
 
 module.exports = {
   download,
   checkForUpdates,
-  checkForUpdatesAndDownload
+  checkForUpdatesAndDownload,
 }
 
 // End Download Alternative

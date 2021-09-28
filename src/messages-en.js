@@ -18,5 +18,5 @@ module.exports = {
   download_canceled: '👎 Download canceled',
   download_error: 'Download Error',
   download_complete: '👍 Downloaded',
-  download_alternative_found: 'Update alternative found',
+  download_found: 'Update alternative found',
 }
