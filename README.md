@@ -2,7 +2,7 @@
 
 <p align="center">
 <strong>Windows</strong> and <strong>Unix</strong> minimal Electron applications with auto updates implemented<br/>
-(based on the <a href="https://github.com/electron/electron-quick-start">electron-quick-start</a>.
+(based on the <a href="https://github.com/electron/electron-quick-start">electron-quick-start</a>).
 </p>
 
 | Linux | Windows |
