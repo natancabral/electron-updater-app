@@ -1,9 +1,22 @@
 const fs = require("fs");
+const os = require('os');
 const path = require("path");
 
 exports.default = async (context) => {
+
   console.log("after pack hook");
   console.log("on linux debian copy 'yml-sample/app-update.yml' file to './dist/linux-unpacked/resources/'");
+
+  // problem .deb fix
+  try {
+    if(os.platform() === 'linux'){
+      const data = fs.readFileSync('./yml-sample/app-update.yml', 'utf8');
+      fs.writeFileSync( path.join(__dirname, 'dist','linux-unpacked','resources','app-update.yml'), data, 'utf8');
+    }      
+  } catch (error) {
+    console.log("Ops! Error on afterPackHook.js");
+  }
+
 };
 
 /*
