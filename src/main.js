@@ -36,6 +36,8 @@ function createWindow() {
   
 }
 
+  console.log('aaa');
+
 // Ready
 app.whenReady().then(() => {
   createWindow();
@@ -46,19 +48,26 @@ app.whenReady().then(() => {
   });
 }).catch( err => console.log(err) );
 
+  console.log('bbb');
+
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     exitAll();
   }
 });
 
+  console.log('ccc');
+
 function exitAll() {
-  mainWindow == null;
+  mainWindow = null;
   app.quit();
   app.exit();
 }
 
+  console.log('ddd');
+
 ipcMain.on('version-app', (event) => {
+  console.log(app.getVersion());
   event.sender.send('version-app', { version: app.getVersion() });
 });
 

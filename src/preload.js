@@ -16,9 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   let notification        = document.getElementById('notification');
   let notificationMessage = document.getElementById('notification-message');
-  let cancelButton        = document.getElementById('notification-cancel-button');
   let restartButton       = document.getElementById('notification-restart-button');
-  let downloadButton      = document.getElementById('notification-download-button');
   let version             = document.getElementById('version');
 
   // [
@@ -60,8 +58,10 @@ window.addEventListener('DOMContentLoaded', () => {
     let {type, message, hide} = data;
 
     if(type === 'update-downloaded'){
-      restartButton.classList.remove('hidden'); // hidden
+      restartButton && restartButton.classList.remove('hidden'); // hidden
     }
+
+    if(!notification) return; // notification not exists
 
     // notification.classList.remove('hidden'); // hidden
     notification.classList.add('fadeIn')
@@ -90,19 +90,11 @@ window.addEventListener('DOMContentLoaded', () => {
     showMessage(data);
   })
 
-  cancelButton.addEventListener('click',() => notification.classList.add('hidden'));
-  restartButton.addEventListener('click',() => ipcRenderer.send('restart-app'));
+  restartButton && restartButton.addEventListener('click',() => ipcRenderer.send('restart-app'));
 
   // Download Alternative
 
-  ipcRenderer.on('download-alternative-check-for-updates', (event, data) => {
-    downloadButton.classList.remove('hidden');
-  });
-
-  ipcRenderer.on('download-alternative-found', (event, data) => {
-    downloadButton.classList.remove('hidden');
-    downloadButton.addEventListener('click',() => ipcRenderer.send('restart-app', 'download-alternative-check-for-updates-and-download'));
-  });
+  // code...
 
   // Version
 
