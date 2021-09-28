@@ -34,10 +34,10 @@ restart-app
 
 function init (){
 
-  // if (initialized || isDev) {
-  //   message(`Running in development ${version}`);
-  //   return
-  // };
+  if (initialized || isDev) {
+    message(`Running in development ${version}`);
+    return
+  };
 
   initialized = true;
   // autoUpdater.setFeedURL(updateFeed);
