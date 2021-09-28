@@ -8,14 +8,14 @@ exports.default = async (context) => {
   console.log("on linux debian copy 'yml-sample/app-update.yml' file to './dist/linux-unpacked/resources/'");
 
   // problem .deb fix
-  try {
-    if(os.platform() === 'linux'){
-      const data = fs.readFileSync('./yml-sample/app-update.yml', 'utf8');
-      fs.writeFileSync( path.join(__dirname, 'dist','linux-unpacked','resources','app-update.yml'), data, 'utf8');
-    }      
-  } catch (error) {
-    console.log("Ops! Error on afterPackHook.js");
-  }
+  // try {
+  //   if(os.platform() === 'linux'){
+  //     const data = fs.readFileSync('./yml-sample/app-update.yml', 'utf8');
+  //     fs.writeFileSync( path.join(__dirname, 'dist','linux-unpacked','resources','app-update.yml'), data, 'utf8');
+  //   }      
+  // } catch (error) {
+  //   console.log("Ops! Error on afterPackHook.js");
+  // }
 
 };
 
