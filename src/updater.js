@@ -74,7 +74,11 @@ function init (){
   });
 
   autoUpdater.once('update-not-available', (ev, err) => {
-    content().send('message', { type: 'update-not-available', message: messages.update_not_avaliable, hide: false });
+    content().send('message', { 
+      type: 'update-not-available', 
+      message: err === undefined ? update_not_avaliable_maybe_token_error : messages.update_not_avaliable,
+      hide: true,
+    });
   });
 
   autoUpdater.on('update-downloaded', (info) => {

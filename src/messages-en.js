@@ -11,6 +11,7 @@ module.exports = {
   checking_for_updates: '🔎 Checking for updates',
   update_avaliable_downloading: '🎉 Update available. Downloading ⌛️',
   update_not_avaliable: '🍀 Upgraded',
+  update_not_avaliable_maybe_token_error: 'Token error',
   downloaded: '🏆 Downloaded',
   download_progress_speed: 'Speed',
   download_progress_downloaded: '🚀 Downloaded',
