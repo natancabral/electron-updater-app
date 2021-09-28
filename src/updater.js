@@ -5,10 +5,6 @@ const download = require('./download');
 const {version} = require('../package.json');
 const messages = require('./messages-en');
 
-// const log = require('electron-log');
-// autoUpdater.logger = log;
-// autoUpdater.logger.transports.file.level = "info";
-
 function content() {
   // let mainWindow = BrowserWindow.getFocusedWindow();
   let mainWindow = BrowserWindow.getAllWindows()[0];
