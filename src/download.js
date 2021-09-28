@@ -5,8 +5,8 @@ const messages = require('./messages-en');
 const {release, version} = require('../package.json');
 const os = require('os');
 
-var tryLatestVersion = true;
 var mainWindowGlobal;
+var tryLatestVersion = true;
 
 function content(mainWindow) {
   return new Promise( (resolve, reject) => {
@@ -130,7 +130,7 @@ function downloadComplete(file) {
   content(null).then( win => {
     win.send('message', { type, message })
   }).catch( () => {});
-  
+
 }
 
 function onCancel(file) {
