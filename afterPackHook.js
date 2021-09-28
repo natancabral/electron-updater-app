@@ -3,6 +3,7 @@ const path = require("path");
 
 exports.default = async (context) => {
   console.log("after pack hook");
+  console.log("on linux debian copy 'yml-sample/app-update.yml' file to './dist/linux-unpacked/resources/'");
 };
 
 /*
