@@ -14,13 +14,32 @@ window.addEventListener('DOMContentLoaded', () => {
   const { ipcRenderer } = require('electron');
   const messages = require('./messages-en');
 
-  const notification        = document.getElementById('notification');
-  const notificationMessage = document.getElementById('notification-message');
-  const cancelButton        = document.getElementById('notification-cancel-button');
-  const restartButton       = document.getElementById('notification-restart-button');
-  const downloadButton      = document.getElementById('notification-download-button');
-  const version             = document.getElementById('version');
+  let notification        = document.getElementById('notification');
+  let notificationMessage = document.getElementById('notification-message');
+  let cancelButton        = document.getElementById('notification-cancel-button');
+  let restartButton       = document.getElementById('notification-restart-button');
+  let downloadButton      = document.getElementById('notification-download-button');
+  let version             = document.getElementById('version');
+
+  // [
+  //   { node: 'p', text: 'Waiting', id: 'notification-message', className: 'hidden', name: '' },
+  //   { node: 'button', text: 'Cancel', id: 'notification-cancel-button', className: '', name: '' },
+  //   { node: 'button', text: 'Restart', id: 'notification-restart-button', className: 'hidden', name: '' },
+  //   { node: 'button', text: 'Download', id: 'notification-download-button', className: 'hidden', name: '' },
+  // ].forEach( (element) => {
+    
+  //   const { node, text, id, className, name } = element;
+  //   const el = document.createElement(node);
+  //   const tx = document.createTextNode(text);
+  //   el.id = id;
+  //   el.name = name;
+  //   // el.classList.add(className);
+  //   el.className = className;
+  //   el.appendChild(tx);
+  //   document.body.appendChild(el);
   
+  // });
+
   /*
   [on] 
   version-app
@@ -83,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.send('version-app');
   ipcRenderer.on('version-app', (event, arg) => {
-    version.innerText = `${messages.version} ${arg.version}`;
+    version && (version.innerText = `${messages.version} ${arg.version}`);
     ipcRenderer.removeAllListeners('version-app');
   });
 
