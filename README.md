@@ -1,8 +1,14 @@
 # Electron Updater App
 
+**Windows** and **Unix** minimal Electron applications with auto updates implemented (based on the [electron-quick-start](https://github.com/electron/electron-quick-start)).
+
 | Linux | Windows |
 |-------|---------|
 |<img src="/src/assets/screen-update-avaliable.png"/>|<img src="/src/assets/screen-update-avaliable-win-10.png"/>|
+
+## Try it
+The latest version of this example is `1.0.2`. So, you can download the [`1.0.1`](https://github.com/natancabral/electron-updater-app/releases/tag/v1.0.1) one and see how the app finds the new version and downloads it.
+
 
 ## To begin
 
