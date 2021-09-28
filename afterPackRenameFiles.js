@@ -8,8 +8,8 @@ fs.readdirSync(dirPath).forEach(function(file) {
     if(file.indexOf(package.build.productName) > -1){
       const renamed = file.replace(
         `${package.build.productName}-${package.version}`,
-        `${package.name}-Setup-${package.version}`,
-        );
+        `${package.name}-${package.version}`,
+      );
       // remove old file
       try {
         fs.unlinkSync(`${dirPath}/${renamed}`);        

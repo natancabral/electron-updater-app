@@ -12,7 +12,7 @@
     "owner": "natancabral",
     "repo": "electron-updater-app",
     "releases": "https://github.com/natancabral/electron-updater-app/releases/",
-    "template": "https://github.com/[owner]/[repo]/releases/download/v[version]/[repo]-Setup-[version].[extension]"
+    "template": "https://github.com/[owner]/[repo]/releases/download/v[version]/[repo]-[version].[extension]"
   },
   "main": "./src/main.js",
   "homepage": "https://github.com/natancabral/electron-updater-app",
@@ -46,7 +46,7 @@
   },
   "build": {
     "afterPack": "./afterPackHook.js",
-    "asar": false,
+    "asar": true,
     "extends": null,
     "appId": "com.natancabral.electron-updater-app",
     "compression": "maximum",
@@ -68,7 +68,7 @@
     },
     "nsis": {
       "shortcutName": "${productName}",
-      "artifactName": "${name}-Setup-${version}.${ext}",
+      "artifactName": "${name}-${version}.${ext}",
       "oneClick": true,
       "perMachine": true,
       "allowElevation": true,
@@ -86,7 +86,7 @@
       "category": "public.app-category.graphics-design"
     },
     "dmg": {
-      "artifactName": "${name}-Setup-${version}.${ext}",
+      "artifactName": "${name}-${version}.${ext}",
       "contents": [
         {
           "x": 110,
@@ -109,7 +109,7 @@
       "category": "Development"
     },
     "deb": {
-      "artifactName": "${name}-Setup-${version}.${ext}"
+      "artifactName": "${name}-${version}.${ext}"
     },
     "directories": {
       "output": "dist"
