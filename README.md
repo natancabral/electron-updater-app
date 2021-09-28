@@ -1,9 +1,6 @@
 # Electron Updater App
 
-|----|----|
-| Unix | Windows |
 |<img src="/src/assets/screen-update-avaliable.png"/>|<img src="/src/assets/screen-update-avaliable-win.png"/>|
-|----|----|
 
 ## To begin
 
