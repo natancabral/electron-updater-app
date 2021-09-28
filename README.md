@@ -58,11 +58,13 @@ publish:
 ```
 - Change publish
 ```json
-"publish": [{
-  "provider": "github",
-  "owner": "[yourusername]",
-  "repo": "[repo]"
-}],
+"build": {
+  "publish": [{
+    "provider": "github",
+    "owner": "[yourusername]",
+    "repo": "[repo]"
+  }],
+},
 ```
 - Release to alternative download
 ```json
@@ -83,9 +85,10 @@ publish:
 - Remenber: title: **1.0.x** and tag: **v1.0.x** (v...)
 - Semantic Versioning: https://semver.org/
 
-#### Warning
+#### Notes
 - Documentation [here](https://www.electron.build/auto-update.html)
-- Deb file not works fine, try with AppImage file.
+- *afterPackRenameFiles.js* to rename package files.
+- DEV mode not work, only after ```npm run build```.
 - Mac sample 1: [article](https://medium.com/@johndyer24/creating-and-deploying-an-auto-updating-electron-app-for-mac-and-windows-using-electron-builder-6a3982c0cee6)
 Mac sample 2: [article](https://medium.com/jspoint/packaging-and-distributing-electron-applications-using-electron-builder-311fc55178d9)
 
