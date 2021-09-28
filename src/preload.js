@@ -2,14 +2,20 @@
 // It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
 
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
+  // REMOVE THIS
+  try {
+    const replaceText = (selector, text) => {
+      const element = document.getElementById(selector)
+      if (element) element.innerText = text
+    }
+  
+    for (const type of ['chrome', 'node', 'electron']) {
+      replaceText(`${type}-version`, process.versions[type])
+    }      
+  } catch (error) {
+    console.log('Remove many lines on preload.js');
   }
-
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
-  }
+  // REMOVE THIS
 
   const { ipcRenderer } = require('electron');
   const messages = require('./messages-en');
