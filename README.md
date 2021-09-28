@@ -1,7 +1,9 @@
 # Electron Updater App
-## September 2021
 
-<img src="/src/assets/screen-update-avaliable.png"/>
+|----|----|
+| Unix | Windows |
+|<img src="/src/assets/screen-update-avaliable.png"/>|<img src="/src/assets/screen-update-avaliable-win.png"/>|
+|----|----|
 
 ## To begin
 
