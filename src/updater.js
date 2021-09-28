@@ -8,12 +8,16 @@ const messages = require('./messages-en');
 function content() {
   let getAll, getFocus, webContents;
   getAll = BrowserWindow.getAllWindows()[0];
-  if('webContents' in getAll){
-    getAll.webContents && (webContents = getAll.webContents);
+  if(getAll){
+    if('webContents' in getAll){
+      getAll.webContents && (webContents = getAll.webContents);
+    }
   }
   getFocus = BrowserWindow.getFocusedWindow();
-  if('webContents' in getFocus){
-    getFocus.webContents && (webContents = getFocus.webContents);
+  if(getFocus){
+    if('webContents' in getFocus){
+      getFocus.webContents && (webContents = getFocus.webContents);
+    }  
   }
   webContents || (webContents = ipcRenderer);
   return webContents;
