@@ -142,8 +142,6 @@ module.exports = {
   checkForUpdatesAndDownload,
 }
 
-// End Download Alternative
-
 // const downloadItems = [];
 // ipcMain.on(
 //   'download-update',
@@ -171,8 +169,3 @@ module.exports = {
 //     }
 //   },
 // );
-
-// npm install electron-dl
-// https://stackoverflow.com/questions/46102851/electron-download-a-file-to-a-specific-location#48231664
-// https://ourcodeworld.com/articles/read/228/how-to-download-a-webfile-with-electron-save-it-and-show-download-progress
-// https://github.com/sindresorhus/electron-dl
