@@ -5,24 +5,6 @@ const download = require('./download');
 const {version} = require('../package.json');
 const messages = require('./messages-en');
 
-function content() {
-  let getAll, getFocus, webContents;
-  getAll = BrowserWindow.getAllWindows()[0];
-  if(getAll){
-    if('webContents' in getAll){
-      getAll.webContents && (webContents = getAll.webContents);
-    }
-  }
-  getFocus = BrowserWindow.getFocusedWindow();
-  if(getFocus){
-    if('webContents' in getFocus){
-      getFocus.webContents && (webContents = getFocus.webContents);
-    }  
-  }
-  webContents || (webContents = ipcRenderer);
-  return webContents;
-}
-
 let initialized = false;
 // let updateFeed = '';
 
@@ -44,7 +26,7 @@ update-download-progress
 restart-app
 */
 
-function init (){
+function init (mainWindow){
 
   if (initialized || isDev) {
     message(`Running in development ${version}`);
@@ -72,21 +54,21 @@ function init (){
       message = `${message}`;
     }
     // message
-    content().send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
+    mainWindow.send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
     // downalod alternative
-    downloadAltertive();
+    downloadAltertive(mainWindow);
   });
 
   autoUpdater.once('checking-for-update', (ev, err) => {
-    content().send('message', { type: 'update-checking', message: messages.checking_for_updates });
+    mainWindow.send('message', { type: 'update-checking', message: messages.checking_for_updates });
   });
 
   autoUpdater.once('update-available', () => {
-    content().send('message', { type: 'update-available', message: messages.update_avaliable_downloading }); // , hide: false
+    mainWindow.send('message', { type: 'update-available', message: messages.update_avaliable_downloading }); // , hide: false
   });
 
   autoUpdater.once('update-not-available', (ev, err) => {
-    content().send('message', { 
+    mainWindow.send('message', { 
       type: 'update-not-available', 
       message: err === undefined ? update_not_avaliable_maybe_token_error : messages.update_not_avaliable,
       hide: true,
@@ -94,7 +76,7 @@ function init (){
   });
 
   autoUpdater.on('update-downloaded', (info) => {
-    content().send('message', { type: 'update-downloaded', message: messages.downloaded });
+    mainWindow.send('message', { type: 'update-downloaded', message: messages.downloaded });
     // const message = {
     //   type: 'info',
     //   buttons: ['Restart and Upgrade', 'Cancel'],
@@ -115,17 +97,17 @@ function init (){
     // message += `${messages.download_progress_speed} ${data.bytesPerSecond} - `;
     message += `${messages.download_progress_downloaded} ${parseInt(data.percent)}% `;
     // message += `(${data.transferred} / ${data.total}) `;
-    // content().send('update-download-progress', message);
-    content().send('message', { type: 'update-download-progress', message: message });
+    // mainWindow.send('update-download-progress', message);
+    mainWindow.send('message', { type: 'update-download-progress', message: message });
   });
 
 }
 
-function downloadAltertive() {
+function downloadAltertive(mainWindow) {
   setTimeout(() => {
-    content().send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
+    mainWindow.send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
     setTimeout(() => {
-      download.checkForUpdatesAndDownload();
+      download.checkForUpdatesAndDownload(mainWindow);
     },2000);
   },2000);
 }

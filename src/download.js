@@ -6,8 +6,9 @@ const {release, version} = require('../package.json');
 const os = require('os');
 
 var tryLatestVersion = true;
+var mainContent;
 
-function content() {
+function getContent() {
   let getAll, getFocus, webContents;
   getAll = BrowserWindow.getAllWindows()[0];
   if(getAll){
@@ -23,6 +24,11 @@ function content() {
   }
   webContents || (webContents = ipcRenderer);
   return webContents;
+}
+
+function content() {
+  if(mainContent) return mainContent;
+  return mainContent = getContent();
 }
 
 // {
@@ -129,7 +135,7 @@ function onCancel(file) {
  *   // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
  * },
  */
-function download(url, properties) {
+function download(mainWindow, url, properties) {
 
   let info = {
     openFolderWhenDone: true,
@@ -145,40 +151,40 @@ function download(url, properties) {
   info.onCompleted = downloadComplete;
   info.onCancel = onCancel;
 
-  return down(BrowserWindow.getAllWindows()[0], url, info)
+  return down(mainWindow, url, info)
   // .then( dl => {
   //   console.log('complete:', dl); // Full file path
   //   console.log('complete:file:', dl.getSavePath());
   // });
 }
 
-function checkForUpdates() {
+function checkForUpdates(mainWindow) {
 
   getRelease().then( () => {
-    content().send('message',{ type: 'download-alternative-found', message: messages.download_found });
-    content().send('download-alternative-found');
+    mainWindow.send('message',{ type: 'download-alternative-found', message: messages.download_found });
+    mainWindow.send('download-alternative-found');
   }).catch( error => {
-    content().send('message',{ type: 'download-alternative-error', message: messages.download_error});
+    mainWindow.send('message',{ type: 'download-alternative-error', message: messages.download_error});
   });
 
 }
 
-function checkForUpdatesAndDownload() {
+function checkForUpdatesAndDownload(mainWindow) {
 
   getRelease().then( url => {
     
-    content().send('message',{ type: 'download-alternative-found', message: messages.download_found });
-    content().send('download-alternative-found');
+    mainWindow.send('message',{ type: 'download-alternative-found', message: messages.download_found });
+    mainWindow.send('download-alternative-found');
     
-    download(url).then( dl => {
+    download(mainWindow, url).then( dl => {
       // run app
       execApp(dl);
     }).catch( data => {
-      content().send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
+      mainWindow.send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
     });
     
   }).catch( data => {
-    content().send('message',{ type: 'download-alternative-error', message: data.error || messages.download_error, hide: true });
+    mainWindow.send('message',{ type: 'download-alternative-error', message: data.error || messages.download_error, hide: true });
   });
 
 }

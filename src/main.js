@@ -29,7 +29,7 @@ function createWindow() {
 
   // --- electron-updater-app ---
   mainWindow.once('ready-to-show', () => {
-    updater.init(); // auto update
+    updater.init(mainWindow); // auto update
     updater.checkForUpdates();
   });
   // --- electron-updater-app ---
@@ -65,9 +65,12 @@ ipcMain.on('version-app', (event) => {
 
 // --- electron-updater-app ---
 ipcMain.on('restart-app', () => {
-  updater.quitAndInstall();
-  // app.relaunch();
-  exitAll();
+  try {
+    updater.quitAndInstall();
+    exitAll();      
+  } catch (error) {
+    app.relaunch();
+  }
 });
 // --- electron-updater-app ---
 
