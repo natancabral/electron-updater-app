@@ -2,7 +2,7 @@ const {BrowserWindow, ipcRenderer} = require('electron');
 const {latestStableVersion} =  require("latest-stable-version");
 const down = require("electron-dl").download;
 const messages = require('./messages-en');
-const {release} = require('./../package.json');
+const {release, version} = require('../package.json');
 const os = require('os');
 
 var tryLatestVersion = true;
@@ -11,6 +11,31 @@ function content() {
   // let mainWindow = BrowserWindow.getFocusedWindow();
   let mainWindow = BrowserWindow.getAllWindows()[0];
   return mainWindow.webContents || ipcRenderer;
+}
+
+// {
+//   filename: 'file.zip',
+//   path: '/path/file.zip',
+//   fileSize: 503320,
+//   mimeType: 'application/zip',
+//   url: 'https://example.com/file.zip'
+// }
+
+function execApp(data) {
+  try {
+    var exec = require('child_process').execFile;
+    var fun = function() {
+      // console.log("fun() start");
+      exec(data.path, function(err, data) {
+        // console.log(err);
+        // console.log(data.toString());
+      });
+    }
+    fun();
+  } catch (error) {
+    // error
+    content().send('message', { type: 'download-alternative-error-exec', message: messages.download_error_exec, hide: false });
+  }
 }
 
 function getRelease() {
@@ -23,8 +48,16 @@ function getRelease() {
     latestStableVersion({
       owner: owner,
       repo: repo,
-    }).then( version => {
+    }).then( v => {
+
+      if(Number(v) <= Number(version) || v === version) {
+        reject({ error: messages.update_not_avaliable, updated: true });
+        return;
+      }
       
+      content().send('message', { type: 'download-alternative-canceled', message: messages.download_canceled });
+      return;
+
       let extension = '';
       let url = template;
     
@@ -38,10 +71,10 @@ function getRelease() {
       url = url.replace(/\[owner\]/g, owner);
       url = url.replace(/\[repo\]/g, repo);
       url = url.replace(/\[extension\]/g, extension);
-      url = url.replace(/\[version\]/g, version);
+      url = url.replace(/\[version\]/g, v);
 
-      if(!owner || !repo || !extension || !version) {
-        reject(url);
+      if(!owner || !repo || !extension || !v) {
+        reject({ error: messages.download_error_url, updated: false });
         return;
       }
 
@@ -50,7 +83,7 @@ function getRelease() {
     }).catch( error => {
 
       tryLatestVersion = true;
-      resolve(error);
+      resolve({ error: messages.download_file_corrupted, updated: false });
 
     });
   });
@@ -90,23 +123,20 @@ function onCancel(file) {
 function download(url, properties) {
 
   let info = {
-    url: url,
-    properties: {
-      openFolderWhenDone: true,
-      saveAs: true, 
-      // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
-    },
+    openFolderWhenDone: true,
+    saveAs: false, 
+    // directory: "./pdf" // "c:/Folder" If not defined go to /Download path
   };
 
   if(properties) {
-    info = {...info, properties: {...info.properties, ...properties}};
+    info = {...info,...properties};
   }
 
-  info.properties.onProgress = downloadProgress;
-  info.properties.onCompleted = downloadComplete;
-  info.properties.onCancel = onCancel;
+  info.onProgress = downloadProgress;
+  info.onCompleted = downloadComplete;
+  info.onCancel = onCancel;
 
-  return down(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+  return down(BrowserWindow.getAllWindows()[0], url, info)
   // .then( dl => {
   //   console.log('complete:', dl); // Full file path
   //   console.log('complete:file:', dl.getSavePath());
@@ -127,9 +157,17 @@ function checkForUpdates() {
 function checkForUpdatesAndDownload() {
 
   getRelease().then( url => {
+    
     content().send('message',{ type: 'download-alternative-found', message: messages.download_found });
     content().send('download-alternative-found');
-    download(url);
+    
+    download(url).then( dl => {
+      // run app
+      execApp(dl);
+    }).catch( data => {
+      content().send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
+    });
+    
   }).catch( error => {
     content().send('message',{ type: 'download-alternative-error', message: messages.download_error });
   });

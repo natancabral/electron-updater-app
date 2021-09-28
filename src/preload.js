@@ -67,11 +67,17 @@ window.addEventListener('DOMContentLoaded', () => {
     notification.classList.add('fadeIn')
     notificationMessage.innerText = message;
 
-    if (hide) {
+    if (hide !== undefined) {
       setTimeout(() => {
-        // notification.classList.add('hidden');
-        notification.classList.remove('fadeIn');
-        notification.classList.add('fadeOut');
+        if(hide){
+          // notification.classList.add('hidden');
+          notification.classList.remove('fadeIn');
+          notification.classList.add('fadeOut');
+        }else{
+          // notification.classList.remove('hidden');
+          notification.classList.add('fadeIn');
+          notification.classList.remove('fadeOut');
+        }
       }, 2000);
     }
   }

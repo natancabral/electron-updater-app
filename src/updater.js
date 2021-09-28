@@ -107,7 +107,7 @@ function init (){
 
 function downloadAltertive() {
   setTimeout(() => {
-    content().send('message', { type: 'download-alternative-starting', message: `Save file to update` });
+    content().send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
     setTimeout(() => {
       download.checkForUpdatesAndDownload();
     },2000);
