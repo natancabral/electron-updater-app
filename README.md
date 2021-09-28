@@ -64,6 +64,17 @@ publish:
   "repo": "[repo]"
 }],
 ```
+- Release
+```json
+"release": {
+  "provider": "github",
+  "owner": "[yourusername]",
+  "repo": "[repo]",
+  "releases": "https://github.com/[yourusername]/[repo]/releases/",
+  "template": "https://github.com/[yourusername]/[repo]/releases/download/v[version]/[repo]-Setup-[version].[extension]"
+},
+```
+
 #### Release
 
 - On terminal: ```ǹpm run build```
