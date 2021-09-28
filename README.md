@@ -71,7 +71,7 @@ publish:
   "owner": "[yourusername]",
   "repo": "[repo]",
   "releases": "https://github.com/[yourusername]/[repo]/releases/",
-  "template": "https://github.com/[yourusername]/[repo]/releases/download/v[version]/[repo]-Setup-[version].[extension]"
+  "template": **NO CHANGE THIS**
 },
 ```
 
