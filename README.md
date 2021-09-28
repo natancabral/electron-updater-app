@@ -1,6 +1,9 @@
 # Electron Updater App
 
-September 2021
+<center>
+<img src="/src/assets/screen-update-avaliable.png"/>
+screen-update-avaliable.png
+</center>
 
 ## To begin
 
