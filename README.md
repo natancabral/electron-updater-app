@@ -1,7 +1,8 @@
 # Electron Updater App
 
-|------|---------|
-|<img src="/src/assets/screen-update-avaliable.png"/>|<img src="/src/assets/screen-update-avaliable-win.png"/>|
+| Unix | Vs | Windows |
+|------|----|---------|
+|<img src="/src/assets/screen-update-avaliable.png"/>| Electron Auto Upload |<img src="/src/assets/screen-update-avaliable-win.png"/>|
 
 ## To begin
 
