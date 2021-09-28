@@ -69,7 +69,7 @@ ipcMain.on('restart-app', () => {
     updater.quitAndInstall();
     exitAll();      
   } catch (error) {
-    app.relaunch();
+    // app.relaunch();
   }
 });
 // --- electron-updater-app ---

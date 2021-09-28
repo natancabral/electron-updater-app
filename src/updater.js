@@ -5,8 +5,30 @@ const download = require('./download');
 const {version} = require('../package.json');
 const messages = require('./messages-en');
 
+var mainWindowGlobal;
 let initialized = false;
 // let updateFeed = '';
+
+function content(mainWindow) {
+  return new Promise( (resolve, reject) => {
+    if(mainWindowGlobal) {
+      resolve(mainWindowGlobal);
+    } else if(mainWindow) {
+      resolve(mainWindow);
+    } else if(BrowserWindow.getFocusedWindow()){
+      try {
+        mainWindowGlobal = BrowserWindow.getFocusedWindow();
+        if(mainWindowGlobal.webContents){
+          mainWindowGlobal = mainWindowGlobal.webContents;
+        } else {
+          reject('NoBrowserWindow');
+        }
+      } catch (error) {
+        reject(error);
+      }
+    }
+  });
+}
 
 // Nuts Server
 // https://github.com/GitbookIO/nuts
@@ -54,29 +76,39 @@ function init (mainWindow){
       message = `${message}`;
     }
     // message
-    mainWindow.send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
+    content(mainWindow).then( win => {
+      win.send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
+    })
     // downalod alternative
     downloadAltertive(mainWindow);
   });
 
   autoUpdater.once('checking-for-update', (ev, err) => {
-    mainWindow.send('message', { type: 'update-checking', message: messages.checking_for_updates });
+    content(mainWindow).then( win => {
+      win.send('message', { type: 'update-checking', message: messages.checking_for_updates });
+    });
   });
 
   autoUpdater.once('update-available', () => {
-    mainWindow.send('message', { type: 'update-available', message: messages.update_avaliable_downloading }); // , hide: false
+    content(mainWindow).then( win => {
+      win.send('message', { type: 'update-available', message: messages.update_avaliable_downloading }); // , hide: false
+    });
   });
 
   autoUpdater.once('update-not-available', (ev, err) => {
-    mainWindow.send('message', { 
-      type: 'update-not-available', 
-      message: err === undefined ? update_not_avaliable_maybe_token_error : messages.update_not_avaliable,
-      hide: true,
+    content(mainWindow).then( win => {
+      win.send('message', { 
+        type: 'update-not-available', 
+        message: err === undefined ? messages.update_not_avaliable_maybe_token_error : messages.update_not_avaliable,
+        hide: true,
+      });
     });
   });
 
   autoUpdater.on('update-downloaded', (info) => {
-    mainWindow.send('message', { type: 'update-downloaded', message: messages.downloaded });
+    content(mainWindow).then( win => {
+      win.send('message', { type: 'update-downloaded', message: messages.downloaded });
+    });
     // const message = {
     //   type: 'info',
     //   buttons: ['Restart and Upgrade', 'Cancel'],
@@ -97,15 +129,19 @@ function init (mainWindow){
     // message += `${messages.download_progress_speed} ${data.bytesPerSecond} - `;
     message += `${messages.download_progress_downloaded} ${parseInt(data.percent)}% `;
     // message += `(${data.transferred} / ${data.total}) `;
-    // mainWindow.send('update-download-progress', message);
-    mainWindow.send('message', { type: 'update-download-progress', message: message });
+    // content(mainWindow).send('update-download-progress', message);
+    content(mainWindow).then( win => {
+      win.send('message', { type: 'update-download-progress', message: message });
+    });
   });
 
 }
 
 function downloadAltertive(mainWindow) {
   setTimeout(() => {
-    mainWindow.send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
+    content(mainWindow).then( win => {
+      win.send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
+    });
     setTimeout(() => {
       download.checkForUpdatesAndDownload(mainWindow);
     },2000);

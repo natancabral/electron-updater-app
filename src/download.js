@@ -6,30 +6,51 @@ const {release, version} = require('../package.json');
 const os = require('os');
 
 var tryLatestVersion = true;
-var mainContent;
+var mainWindowGlobal;
 
-function getContent() {
-  let getAll, getFocus, webContents;
-  getAll = BrowserWindow.getAllWindows()[0];
-  if(getAll){
-    if('webContents' in getAll){
-      getAll.webContents && (webContents = getAll.webContents);
+function content(mainWindow) {
+  return new Promise( (resolve, reject) => {
+    if(mainWindowGlobal) {
+      resolve(mainWindowGlobal);
+    } else if(mainWindow) {
+      resolve(mainWindow);
+    } else if(BrowserWindow.getFocusedWindow()){
+      try {
+        mainWindowGlobal = BrowserWindow.getFocusedWindow();
+        if(mainWindowGlobal.webContents){
+          mainWindowGlobal = mainWindowGlobal.webContents;
+        } else {
+          reject('NoBrowserWindow');
+        }
+      } catch (error) {
+        reject(error);
+      }
     }
-  }
-  getFocus = BrowserWindow.getFocusedWindow();
-  if(getFocus){
-    if('webContents' in getFocus){
-      getFocus.webContents && (webContents = getFocus.webContents);
-    }  
-  }
-  webContents || (webContents = ipcRenderer);
-  return webContents;
+  });
 }
 
-function content() {
-  if(mainContent) return mainContent;
-  return mainContent = getContent();
-}
+// function getContent() {
+//   let getAll, getFocus, webContents;
+//   getAll = BrowserWindow.getAllWindows()[0];
+//   if(getAll){
+//     if('webContents' in getAll){
+//       getAll.webContents && (webContents = getAll.webContents);
+//     }
+//   }
+//   getFocus = BrowserWindow.getFocusedWindow();
+//   if(getFocus){
+//     if('webContents' in getFocus){
+//       getFocus.webContents && (webContents = getFocus.webContents);
+//     }  
+//   }
+//   webContents || (webContents = ipcRenderer);
+//   return webContents;
+// }
+
+// function content() {
+//   if(mainContent) return mainContent;
+//   return mainContent = getContent();
+// }
 
 // {
 //   filename: 'file.zip',
@@ -38,23 +59,6 @@ function content() {
 //   mimeType: 'application/zip',
 //   url: 'https://example.com/file.zip'
 // }
-
-function execApp(data) {
-  try {
-    var exec = require('child_process').execFile;
-    var fun = function() {
-      // console.log("fun() start");
-      exec(data.path, function(err, data) {
-        // console.log(err);
-        // console.log(data.toString());
-      });
-    }
-    fun();
-  } catch (error) {
-    // error
-    content().send('message', { type: 'download-alternative-error-exec', message: messages.download_error_exec, hide: false });
-  }
-}
 
 function getRelease() {
   
@@ -105,10 +109,15 @@ function getRelease() {
 }
 
 function downloadProgress(progress) {
-  content().send('message', { type: 'download-progress', message: `Completed: ${progress.percent * 100 >> 0}%` });
+
+  content(null).then( win => {
+    win.send('message', { type: 'download-progress', message: `Completed: ${progress.percent * 100 >> 0}%` });
+  }).catch( () => {});
+
 }
 
 function downloadComplete(file) {
+
   let message;
   let type;
   if('errorTitle' in file || 'errorMessage' in file) { // file.hasOwnProprety(errorTitle)
@@ -118,11 +127,18 @@ function downloadComplete(file) {
     type = 'download-completed';
     message = messages.download_complete;
   }
-  content().send('message', { type, message });
+  content(null).then( win => {
+    win.send('message', { type, message })
+  }).catch( () => {});
+  
 }
 
 function onCancel(file) {
-  content().send('message', { type: 'download-alternative-canceled', message: messages.download_canceled });
+
+  content(null).then( win => {
+    win.send('message', { type: 'download-alternative-canceled', message: messages.download_canceled });
+  }).catch( () => {});
+
 }
 
 /**
@@ -161,10 +177,18 @@ function download(mainWindow, url, properties) {
 function checkForUpdates(mainWindow) {
 
   getRelease().then( () => {
-    mainWindow.send('message',{ type: 'download-alternative-found', message: messages.download_found });
-    mainWindow.send('download-alternative-found');
+
+    content(mainWindow).then( win => {
+      win.send('message',{ type: 'download-alternative-found', message: messages.download_found });
+      win.send('download-alternative-found');
+    }).catch( () => {});
+
   }).catch( error => {
-    mainWindow.send('message',{ type: 'download-alternative-error', message: messages.download_error});
+
+    content(mainWindow).then( win => {
+      win.send('message',{ type: 'download-alternative-error', message: messages.download_error});
+    }).catch( () => {});
+
   });
 
 }
@@ -173,18 +197,22 @@ function checkForUpdatesAndDownload(mainWindow) {
 
   getRelease().then( url => {
     
-    mainWindow.send('message',{ type: 'download-alternative-found', message: messages.download_found });
-    mainWindow.send('download-alternative-found');
-    
-    download(mainWindow, url).then( dl => {
-      // run app
-      execApp(dl);
-    }).catch( data => {
-      mainWindow.send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
-    });
-    
+    content(mainWindow).then( win => {
+      win.send('message',{ type: 'download-alternative-found', message: messages.download_found });
+      win.send('download-alternative-found');
+
+      download(win, url).then( dl => {
+        // run app
+      }).catch( data => {
+        win.send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
+      });
+  
+    }).catch( () => {});
+        
   }).catch( data => {
-    mainWindow.send('message',{ type: 'download-alternative-error', message: data.error || messages.download_error, hide: true });
+    content(mainWindow).then( win => {
+      win.send('message',{ type: 'download-alternative-error', message: data.error || messages.download_error, hide: true });
+    }).catch( () => {});
   });
 
 }
