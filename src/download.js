@@ -127,6 +127,7 @@ function checkForUpdates() {
 function checkForUpdatesAndDownload() {
 
   getRelease().then( url => {
+    content().send('message',{ type: 'url', message: url });
     download(url);
   }).catch( error => {
     content().send('message',{ type: 'download-alternative-error', message: messages.download_error });
