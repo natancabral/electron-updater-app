@@ -1,6 +1,10 @@
+<p align="center">
 # Electron Updater App
 
-**Windows** and **Unix** minimal Electron applications with auto updates implemented (based on the [electron-quick-start](https://github.com/electron/electron-quick-start)).
+**Windows** and **Unix** minimal Electron applications with auto updates implemented<br/>
+(based on the [electron-quick-start](https://github.com/electron/electron-quick-start)).
+
+</p>
 
 | Linux | Windows |
 |-------|---------|
