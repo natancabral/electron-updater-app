@@ -80,7 +80,7 @@ publish:
 - On terminal: ```ǹpm run build```
 - Upload all file (./dist)
 - https://github.com/[yourusername]/[repo]/releases
-- Remenber: tag: **v1.0.x** and title: **1.0.x**
+- Remenber: title: **1.0.x** and tag: **v1.0.x** (v...)
 - Semantic Versioning: https://semver.org/
 
 #### Warning
