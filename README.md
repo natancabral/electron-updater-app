@@ -96,6 +96,10 @@ publish:
 - Remenber: title: **1.0.x** and tag: **v1.0.x** (v...)
 - Semantic Versioning: https://semver.org/
 
+<p align="center">
+  <img src="/src/assets/screen-list-files.png"/>
+</p>
+
 #### Notes
 - Documentation [here](https://www.electron.build/auto-update.html)
 - *afterPackRenameFiles.js* to rename package files.
