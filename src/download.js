@@ -29,10 +29,10 @@ function getRelease() {
       let url = template;
     
       switch(os.platform()) {
-        case 'darwin': extension = 'dmg';
-        case 'win32':  extension = 'exe';
-        case 'win64':  extension = 'exe';
-        case 'linux':  extension = 'deb';
+        case 'darwin': extension = 'dmg'; break;
+        case 'win32':  extension = 'exe'; break;
+        case 'win64':  extension = 'exe'; break;
+        case 'linux':  extension = 'deb'; break;
       }
 
       url = url.replace(/\[owner\]/g, owner);

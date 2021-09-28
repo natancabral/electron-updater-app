@@ -2,7 +2,7 @@
 
 | Linux | Vs | Windows |
 |------|----|---------|
-|<img src="/src/assets/screen-update-avaliable.png"/>| Updater |<img src="/src/assets/screen-update-avaliable-win.png"/>|
+|<img src="/src/assets/screen-update-avaliable.png"/>| Updater |<img src="/src/assets/screen-update-avaliable-win-10.png"/>|
 
 ## To begin
 

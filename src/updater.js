@@ -34,10 +34,10 @@ restart-app
 
 function init (){
 
-  if (initialized || isDev) {
-    message(`Running in development ${version}`);
-    return
-  };
+  // if (initialized || isDev) {
+  //   message(`Running in development ${version}`);
+  //   return
+  // };
 
   initialized = true;
   // autoUpdater.setFeedURL(updateFeed);
@@ -74,7 +74,7 @@ function init (){
   });
 
   autoUpdater.once('update-not-available', (ev, err) => {
-    content().send('message', { type: 'update-not-available', message: messages.update_not_avaliable });
+    content().send('message', { type: 'update-not-available', message: messages.update_not_avaliable, hide: false });
   });
 
   autoUpdater.on('update-downloaded', (info) => {

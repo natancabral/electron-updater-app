@@ -7,28 +7,26 @@ body {
   background-color: #eeeeee;
   text-align: center;
 }
-
 #notification {
   z-index: 9999;
   position: fixed;
   bottom: 20px;
   left: 20px;
   width: 200px;
-  padding: 20px;
+  padding: 10px;
   border-radius: 5px;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: left;
 }
-.hidden {
-  display: none;
-}
-#container-messages {
+#notification-message {
+  padding: 0;
   margin: 0;
 }
-.alert-info {
-  padding: 20px;
+.display-none {
+  display: none;
 }
-.alert-info-message {
+.hidden {
   opacity: 0;
 }
 .animated {

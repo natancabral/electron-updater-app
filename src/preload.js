@@ -63,16 +63,16 @@ window.addEventListener('DOMContentLoaded', () => {
       restartButton.classList.remove('hidden'); // hidden
     }
 
-    notification.classList.remove('hidden'); // hidden
+    // notification.classList.remove('hidden'); // hidden
     notification.classList.add('fadeIn')
     notificationMessage.innerText = message;
 
     if (hide) {
       setTimeout(() => {
-        notification.classList.add('hidden');
+        // notification.classList.add('hidden');
         notification.classList.remove('fadeIn');
         notification.classList.add('fadeOut');
-      }, 3000);
+      }, 2000);
     }
   }
 
