@@ -64,7 +64,7 @@ publish:
   "repo": "[repo]"
 }],
 ```
-- Release to download alternative
+- Release to alternative download
 ```json
 "release": {
   "provider": "github",
