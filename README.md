@@ -90,7 +90,7 @@ publish:
 
 #### Release
 
-- On terminal: ```ǹpm run build```
+- On terminal: ```npm run build```
 - Upload all file (./dist)
 - https://github.com/[yourusername]/[repo]/releases
 - Remenber: title: **1.0.x** and tag: **v1.0.x** (letter v... on tag)
