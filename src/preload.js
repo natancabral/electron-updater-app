@@ -61,7 +61,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function showMessage(data) {
 
-    let {type, message, hide} = data;
+    let {type, message, hide, time} = data;
+
+    time = time || 2000;
 
     if(type === 'update-downloaded'){
       restartButton && restartButton.classList.remove('hidden'); // hidden
@@ -84,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
           notification.classList.add('fadeIn');
           notification.classList.remove('fadeOut');
         }
-      }, 2000);
+      }, time);
     }
   }
 
@@ -96,6 +98,10 @@ window.addEventListener('DOMContentLoaded', () => {
     showMessage(data);
   })
 
+  notification && notification.addEventListener('dblclick', () => {
+    notification.classList.remove('fadeIn');
+    notification.classList.add('fadeOut')
+  });
   restartButton && restartButton.addEventListener('click',() => ipcRenderer.send('restart-app'));
 
   // Download Alternative

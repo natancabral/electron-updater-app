@@ -1,9 +1,10 @@
 const {BrowserWindow, ipcRenderer} = require('electron');
+const os = require('os');
+const path = require('path');
 const {latestStableVersion} =  require("latest-stable-version");
 const down = require("electron-dl").download;
 const messages = require('./messages-en');
 const {release, version} = require('../package.json');
-const os = require('os');
 
 var mainWindowGlobal;
 var tryLatestVersion = true;
@@ -117,6 +118,7 @@ function downloadProgress(progress) {
 
 function downloadComplete(file) {
 
+  let fileName = '';
   let message;
   let type;
   if('errorTitle' in file || 'errorMessage' in file) { // file.hasOwnProprety(errorTitle)
@@ -125,9 +127,13 @@ function downloadComplete(file) {
   } else {
     type = 'download-completed';
     message = messages.download_complete;
+    fileName = file.path && String(file.path).split(path.delimiters).pop();
   }
   content(null).then( win => {
     win.send('message', { type, message })
+    setTimeout(() => {
+      win.send('message', { type, message: `${messages.download_open_download_folder} ${fileName}`, hide: true, time: 5000});
+    },2000);
   }).catch( () => {});
 
 }
@@ -159,12 +165,12 @@ function download(mainWindow, url, properties) {
   };
 
   if(properties) {
-    info = {...info,...properties};
+    info = { ...info, ...properties };
   }
 
-  info.onProgress = downloadProgress;
-  info.onCompleted = downloadComplete;
-  info.onCancel = onCancel;
+  info.onProgress   = downloadProgress;
+  info.onCompleted  = downloadComplete;
+  info.onCancel     = onCancel;
 
   return down(mainWindow, url, info)
   // .then( dl => {
