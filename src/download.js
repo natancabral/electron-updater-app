@@ -64,13 +64,16 @@ function getRelease() {
   
   if(!tryLatestVersion) return;
 
-  const { owner, repo, template} = release;
+  const { owner, repo, template } = release;
 
   return new Promise((resolve, reject) => {
+
     latestStableVersion({
       owner: owner,
       repo: repo,
     }).then( v => {
+
+      tryLatestVersion = true;
 
       if(Number(v) <= Number(version) || v === version) {
         reject({ error: messages.update_not_avaliable, updated: true });
@@ -209,7 +212,13 @@ function checkForUpdatesAndDownload(mainWindow) {
       download(win, url).then( dl => {
         // run app
       }).catch( data => {
-        win.send('message',{ type: 'download-alternative-corrupted', message: data.error || messages.download_bad_server_connection, hide: true });
+        const message;
+        if(String(data).includes('was interrupted')){
+          message = messages.download_was_interrupted;
+        } else {
+          message = messages.download_bad_server_connection;
+        }
+        win.send('message',{ type: 'download-alternative-corrupted', message: message, hide: true });
       });
   
     }).catch( () => {});

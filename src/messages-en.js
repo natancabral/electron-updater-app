@@ -5,9 +5,10 @@ module.exports = {
   error: '😱 ',
   no_versions_published: '👎 No versions published',
   no_published_versions_on_github: '👎 No published versions on GitHub',
-  cannot_download: '👎 Cannot download',
-  yml_file_not_found_local: '👎 YML file not found',
-  yml_file_not_found_http: '👎 YML file not found on server (http)',
+  cannot_download: '💢 Cannot download',
+  download_was_interrupted: '💢 Download was interrupted',
+  yml_file_not_found_local: '📃 YML file not found',
+  yml_file_not_found_http: '📃 YML file not found on server (http)',
   // messages
   checking_for_updates: '🔎 Checking for updates',
   update_avaliable_downloading: '🎉 Update available. Downloading ⌛️',
