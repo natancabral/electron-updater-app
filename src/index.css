@@ -30,12 +30,13 @@ body {
   margin-top: 10px;
   padding: 5px 10px;
   border: 1px solid #ffffff;
-  background-color: #333333;
+  background-color: #777777;
+  color: #ffffff;
 }
 .opacity-0 {
   opacity: 0;
 }
-.hidden {
+.hiddenX {
   display: none;
 }
 .animated {
