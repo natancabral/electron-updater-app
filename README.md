@@ -32,7 +32,7 @@ $ npm run build
   - build > publish
 - [Release](#release):
   - Create a [realease](https://github.com/natancabral/electron-updater-app/releases)
-  - Title: **1.0.x** and Tag: **v1.0.x** (v...)
+  - Title: **1.0.x** and Tag: **v1.0.x** (letter v... on tag)
 
 #### Token
 - You need a token
@@ -93,7 +93,7 @@ publish:
 - On terminal: ```ǹpm run build```
 - Upload all file (./dist)
 - https://github.com/[yourusername]/[repo]/releases
-- Remenber: title: **1.0.x** and tag: **v1.0.x** (v...)
+- Remenber: title: **1.0.x** and tag: **v1.0.x** (letter v... on tag)
 - Semantic Versioning: https://semver.org/
 
 <p align="center">
