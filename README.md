@@ -25,7 +25,7 @@ $ npm run build
 ## Configure
 
 - [Token](#token)
-  - Get your token [here](https://github.com/settings/tokens) or [read this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+  - Get your token [here](https://github.com/settings/tokens/new) or [read this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 - [File YML](#file-yml)
   - electron-builder.yml
 - [Configure package.json](#configure-packagejson)
@@ -36,7 +36,7 @@ $ npm run build
 
 #### Token
 - You need a token
-- https://github.com/settings/tokens
+- https://github.com/settings/tokens/new
 - [More information](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 #### File YML

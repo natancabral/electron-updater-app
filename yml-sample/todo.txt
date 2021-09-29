@@ -1,0 +1,25 @@
+# Private Server
+
+https://github.com/GitbookIO/nuts
+
+autoUpdater.setConfig({
+  provider: 'generic',
+  url: 'https://website.com/download',
+  channel: 'latest'
+});
+
+"publish": {
+  "provider": "generic",
+  "url": "http://xx.xx.xx.xx:port/update/${os}",
+  "useMultipleRangeRequest": false
+  "channel": "latest"
+},
+
+# GitHub GH_TOKEN variable
+
+.env
+// $ export GH_TOKEN="ghp_nxxx..."
+GH_TOKEN=ghp_9FhfBkEPQJLHw9QQPqtFWb1qvAoFV0gFSNSn
+
+main.js
+process.env.GH_TOKEN='ghp_9FhfBkEPQJLHw9QQPqtFWb1qvAoFV0gFSNSn';
