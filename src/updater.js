@@ -122,7 +122,7 @@ function init (mainWindow){
   autoUpdater.on('download-progress', function (data) {
     let message = '';
     // message += `${messages.download_progress_speed} ${data.bytesPerSecond} - `;
-    message += `${messages.download_progress_downloaded} ${parseInt(data.percent)}% `;
+    message += `${messages.download_progress_percent} ${parseInt(data.percent)}% `;
     // message += `(${data.transferred} / ${data.total}) `;
     // content(mainWindow).send('update-download-progress', message);
     content(mainWindow).then( win => {

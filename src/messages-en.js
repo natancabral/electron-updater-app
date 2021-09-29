@@ -15,7 +15,7 @@ module.exports = {
   update_not_avaliable: '🏆 Upgraded',
   downloaded: '📁 Downloaded',
   download_progress_speed: 'Speed',
-  download_progress_downloaded: '🚀 Downloaded',
+  download_progress_percent: '🚀 Downloaded',
   // download alternative
   download_canceled: '👎 Download canceled',
   download_error: '👎 Download error',
@@ -26,4 +26,5 @@ module.exports = {
   download_file_corrupted: '😱 File was interrupted or corrupted',
   download_bad_server_connection: '💢 Bad server connection',
   download_open_download_folder: '📁 Open the file on "Download" ',
+  
 }

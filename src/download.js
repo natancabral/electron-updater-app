@@ -114,7 +114,7 @@ function getRelease() {
 function downloadProgress(progress) {
 
   content(null).then( win => {
-    win.send('message', { type: 'download-progress', message: `Completed: ${progress.percent * 100 >> 0}%` });
+    win.send('message', { type: 'download-progress', message: `${messages.download_progress_percent} ${progress.percent * 100 >> 0}%` });
   }).catch( () => {});
 
 }
