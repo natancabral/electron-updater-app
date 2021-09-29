@@ -7,15 +7,19 @@ fs.readdirSync(dirPath).forEach(function(file) {
   if (fs.statSync(`${dirPath}/${file}`).isFile()) {
     if(file.indexOf(package.build.productName) > -1){
       const renamed = file.replace(
-        `${package.build.productName}-${package.version}`,
-        `${package.name}-${package.version}`,
-      );
+        `${package.build.productName}`,
+        `${package.name}`,
+      ).replace(/\s/g,'-');
       // remove old file
       try {
         fs.unlinkSync(`${dirPath}/${renamed}`);        
       } catch (error) {}
       // rename new file
-      fs.renameSync(`${dirPath}/${file}`, `${dirPath}/${renamed}`);
+      try {
+        fs.renameSync(`${dirPath}/${file}`, `${dirPath}/${renamed}`);        
+      } catch (error) {
+        console.log('Cannt rename file: ', file, ' to ', renamed);
+      }
     }
   }
 });
