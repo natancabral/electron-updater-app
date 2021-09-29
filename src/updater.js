@@ -17,14 +17,13 @@ function content(mainWindow) {
       resolve(mainWindow);
     } else if(BrowserWindow.getFocusedWindow()){
       try {
-        mainWindowGlobal = BrowserWindow.getFocusedWindow();
-        if(mainWindowGlobal.webContents){
-          mainWindowGlobal = mainWindowGlobal.webContents;
-        } else {
-          reject('NoBrowserWindow');
-        }
+        mainWindowGlobal = BrowserWindow.getFocusedWindow().webContents;
       } catch (error) {
-        reject(error);
+        if(ipcRenderer){
+          mainWindowGlobal = ipcRenderer;
+        } else {
+          reject(error);
+        }
       }
     }
   });
@@ -77,7 +76,7 @@ function init (mainWindow){
     }
     // message
     content(mainWindow).then( win => {
-      win.send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
+      win.send('message', { type: 'update-error', message: `${messages.error} ${message} ${error}`, hide: false });
     })
     // downalod alternative
     downloadAltertive(mainWindow);
@@ -97,11 +96,7 @@ function init (mainWindow){
 
   autoUpdater.once('update-not-available', (ev, err) => {
     content(mainWindow).then( win => {
-      win.send('message', { 
-        type: 'update-not-available', 
-        message: err === undefined ? messages.update_not_avaliable_maybe_token_error : messages.update_not_avaliable,
-        hide: true,
-      });
+      win.send('message', { type: 'update-not-available', message: messages.update_not_avaliable, hide: true });
     });
   });
 
@@ -138,14 +133,10 @@ function init (mainWindow){
 }
 
 function downloadAltertive(mainWindow) {
-  setTimeout(() => {
-    content(mainWindow).then( win => {
-      win.send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
-    });
-    setTimeout(() => {
-      download.checkForUpdatesAndDownload(mainWindow);
-    },2000);
-  },2000);
+  content(mainWindow).then( win => {
+    win.send('message', { type: 'download-alternative-starting', message: messages.download_save_file });
+    download.checkForUpdatesAndDownload(mainWindow);
+  });
 }
 
 function checkForUpdates () {

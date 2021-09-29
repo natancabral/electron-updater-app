@@ -1,4 +1,5 @@
 module.exports = {
+  // https://pt.piliapp.com/emoji/list/
   version: 'Version',
   // error
   error: '😱 ',
@@ -10,19 +11,18 @@ module.exports = {
   // messages
   checking_for_updates: '🔎 Checking for updates',
   update_avaliable_downloading: '🎉 Update available. Downloading ⌛️',
-  update_not_avaliable: '🍀 Upgraded',
-  update_not_avaliable_maybe_token_error: 'Token error',
-  downloaded: '🏆 Downloaded',
+  update_not_avaliable: '🏆 Upgraded',
+  downloaded: '📁 Downloaded',
   download_progress_speed: 'Speed',
   download_progress_downloaded: '🚀 Downloaded',
   // download alternative
   download_canceled: '👎 Download canceled',
   download_error: '👎 Download error',
   download_error_url: '👎 URL error',
-  download_complete: '🏆 Downloaded',
+  download_complete: '📁 Downloaded',
   download_found: '🎉 Update alternative found',
   download_save_file: '💾 Save file to update',
   download_file_corrupted: '😱 File was interrupted or corrupted',
   download_bad_server_connection: '💢 Bad server connection',
-  download_error_exec: 'Open file on /Download/ path',
+  download_error_exec: 'Open the file on "Download" path',
 }

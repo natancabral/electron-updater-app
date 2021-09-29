@@ -16,14 +16,13 @@ function content(mainWindow) {
       resolve(mainWindow);
     } else if(BrowserWindow.getFocusedWindow()){
       try {
-        mainWindowGlobal = BrowserWindow.getFocusedWindow();
-        if(mainWindowGlobal.webContents){
-          mainWindowGlobal = mainWindowGlobal.webContents;
-        } else {
-          reject('NoBrowserWindow');
-        }
+        mainWindowGlobal = BrowserWindow.getFocusedWindow().webContents;
       } catch (error) {
-        reject(error);
+        if(ipcRenderer){
+          mainWindowGlobal = ipcRenderer;
+        } else {
+          reject(error);
+        }
       }
     }
   });
