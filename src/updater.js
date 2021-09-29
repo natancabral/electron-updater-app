@@ -76,7 +76,7 @@ function init (mainWindow){
     }
     // message
     content(mainWindow).then( win => {
-      win.send('message', { type: 'update-error', message: `${messages.error} ${message} ${error}`, hide: false });
+      win.send('message', { type: 'update-error', message: `${messages.error} ${message}`, hide: false });
     })
     // downalod alternative
     downloadAltertive(mainWindow);
