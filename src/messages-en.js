@@ -24,5 +24,5 @@ module.exports = {
   download_save_file: '💾 Save file to update',
   download_file_corrupted: '😱 File was interrupted or corrupted',
   download_bad_server_connection: '💢 Bad server connection',
-  download_error_exec: 'Open the file on "Download" path',
+  download_error_exec: 'Open the file on "Download" folder',
 }
