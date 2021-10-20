@@ -21,7 +21,11 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile('./src/index.html');
+  mainWindow.loadFile('./src/index.html').then( data => {
+  }).catch( err => {});
+
+  // mainWindow.loadURL('https://www.domain.com').then( data => {
+  // }).catch( err => {});
   
   mainWindow.on('closed', function () {
     mainWindow = null;

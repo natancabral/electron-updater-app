@@ -212,7 +212,7 @@ function checkForUpdatesAndDownload(mainWindow) {
       download(win, url).then( dl => {
         // run app
       }).catch( data => {
-        const message;
+        let message;
         if(String(data).includes('was interrupted')){
           message = messages.download_was_interrupted;
         } else {
