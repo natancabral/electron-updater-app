@@ -2,9 +2,20 @@
 ## token: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 ## gen token: https://github.com/settings/tokens
 appId: com.natancabral.electron-updater-app
-owner: natancabral
-repo: electron-updater-app
-url: 'https://github.com/natancabral/electron-updater-app'
 publish:
   provider: github
+  owner: natancabral
+  repo: electron-updater-app
   token: [YOUR GITHUB ACCESS TOKEN]
+  # vPrefixedTagName: true
+nsis:
+  shortcutName: ${productName}
+  artifactName: ${name}-${version}.${ext}
+  oneClick: true
+  perMachine: true
+  allowElevation: true
+  runAfterFinish: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  deleteAppDataOnUninstall: true
+  allowToChangeInstallationDirectory: false

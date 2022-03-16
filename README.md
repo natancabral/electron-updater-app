@@ -43,22 +43,22 @@ $ npm run build
 - Rename **fake_electron-builder.yml** file to **electron-builder.yml** and change data
 ```yml
 appId: com.natancabral.electron-updater-app
-owner: natancabral
-repo: electron-updater-app
-url: 'https://github.com/natancabral/electron-updater-app'
 publish:
   provider: github
+  owner: natancabral
+  repo: electron-updater-app
   token: [YOUR GITHUB ACCESS TOKEN]
+  vPrefixedTagName: true
 ```
 - Sample:
 ```yml
 appId: com.[yourusername].[repo]
-owner: [yourusername]
-repo: [repo]
-url: 'https://github.com/[yourusername]/[repo]'
 publish:
   provider: github
+  owner: [yourusername]
+  repo: [repo]
   token: [token]
+  vPrefixedTagName: true
 ```
 
 
@@ -90,7 +90,7 @@ publish:
 
 #### Release
 
-- On terminal: ```npm run build```
+- On terminal: ```npm run build:win:publish``` or to not publish```npm run build:win```
 - Upload all file (./dist)
 - https://github.com/[yourusername]/[repo]/releases
 - Remenber: title: **1.0.x** and tag: **v1.0.x** (letter v... on tag)
