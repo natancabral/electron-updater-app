@@ -9,6 +9,4 @@ package.json
 
 electron-builder.yml:
 
-win
-  certificateFile: ./certificate/certificate.pfx,
-  certificatePassword: [password],
+NO SET HERE, only in package.js
