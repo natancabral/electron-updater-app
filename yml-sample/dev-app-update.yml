@@ -19,4 +19,7 @@ nsis:
   createStartMenuShortcut: true
   deleteAppDataOnUninstall: true
   allowToChangeInstallationDirectory: false
-  
+dmg:
+  artifactName: ${name}-${version}.${ext}
+deb:
+  artifactName: ${name}-${version}.${ext}

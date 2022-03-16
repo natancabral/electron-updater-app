@@ -26,7 +26,7 @@
     "start:prod": "electron . APP_DEV=false",
     "deploy":      "electron-builder build --publish never",
 
-    "build":       "electron-builder build --publish never && npm run build:rename",
+    "build":       "electron-builder build --config=electron-builder.yml --publish never && npm run build:rename",
     "build:win32": "electron-builder build --config=electron-builder.yml --publish never --win --ia32 && npm run build:rename",
     "build:win":   "electron-builder build --config=electron-builder.yml --publish never --win --x64 && npm run build:rename",
     "build:linux": "electron-builder build --config=electron-builder.yml --publish never --linux && npm run build:rename",
