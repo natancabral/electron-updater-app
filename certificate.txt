@@ -1,6 +1,14 @@
-package.json && electron-builder.yml:
+package.json
 
-build
-  win
+"build": {
+  "win": {
     "certificateFile": "./certificate/certificate.pfx",
-    "certificatePassword": "password",
+    "certificatePassword": "[password]",
+  }
+}
+
+electron-builder.yml:
+
+win
+  certificateFile: ./certificate/certificate.pfx,
+  certificatePassword: [password],

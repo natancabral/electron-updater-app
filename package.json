@@ -33,7 +33,7 @@
     "build:all":   "electron-builder build --config=electron-builder.yml --publish never --win --linux --mac && npm run build:rename",
 
     "build:win32:publish": "electron-builder build --config=electron-builder.yml --publish always --win --ia32 && npm run build:rename",
-    "build:win:publish":   "electron-builder build --config=electron-builder.yml --publish always --win --x64 && npm run build:rename",
+    "build:win:publish":   "electron-builder build --config=electron-builder.ymlnp --publish always --win --x64 && npm run build:rename",
     "build:linux:publish": "electron-builder build --config=electron-builder.yml --publish always --linux && npm run build:rename",
     "build:all:publish":   "electron-builder build --config=electron-builder.yml --publish always --win --linux --mac && npm run build:rename",
 
