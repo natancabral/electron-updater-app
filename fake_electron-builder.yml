@@ -2,6 +2,14 @@
 ## token: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 ## gen token: https://github.com/settings/tokens
 appId: com.natancabral.electron-updater-app
+
+asar: true
+extends: null
+compression: maximum
+productName: "Electron Updater App"
+copyright: "Copyright © 2022 ${author}"
+afterPack: "./afterPackHook.js"
+
 publish:
   provider: github
   owner: natancabral
